@@ -7,7 +7,7 @@
 ABlock::ABlock()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 }
 
@@ -18,10 +18,9 @@ void ABlock::BeginPlay()
 	
 }
 
-// Called every frame
-void ABlock::Tick(float DeltaTime)
+void ABlock::UpdateVisibility()
 {
-	Super::Tick(DeltaTime);
-
+	FVector3d Location = GetActorLocation();
 }
+
 

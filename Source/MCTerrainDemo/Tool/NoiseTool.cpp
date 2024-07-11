@@ -3,10 +3,12 @@
 
 #include "NoiseTool.h"
 
-NoiseTool::NoiseTool()
+void NoiseTool::PreHandlePerlinNoise2d(FVector2d Position2d, int32 CrystalSize)
 {
-}
+	// 根据给定点世界坐标与晶格大小确定给定点所在的晶格
+	// Pi: 所在晶格的左下顶点的虚拟坐标
+	const FVector2d Pi = FVector2d(floor(Position2d.X / CrystalSize), floor(Position2d.Y / CrystalSize));
+	FVector2d Vertex[4] = {Pi, FVector2d(Pi.X + 1, Pi.Y), FVector2d(Pi.X, Pi.Y + 1), FVector2d(Pi.X + 1, Pi.Y + 1)};
 
-NoiseTool::~NoiseTool()
-{
+	// 根据晶格顶点坐标
 }

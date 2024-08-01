@@ -4,6 +4,9 @@
 
 #include "CoreMinimal.h"
 
+static FVector2d GGradientVector2d[8] = {FVector2d(0,1), FVector2d(0,-1), FVector2d(1,0), FVector2d(-1,0),
+								FVector2d(1,1), FVector2d(1,-1), FVector2d(-1,1), FVector2d(-1,-1)};
+
 /**
  * 
  */

@@ -6,14 +6,13 @@
 
 static FVector2d GGradientVector2d[8] = {FVector2d(0,1), FVector2d(0,-1), FVector2d(1,0), FVector2d(-1,0),
 								FVector2d(1,1), FVector2d(1,-1), FVector2d(-1,1), FVector2d(-1,-1)};
-
+static FVector2d CrystalVertex[4];
 /**
  * 
  */
 class MCTERRAINDEMO_API NoiseTool
 {
 private:
-	static FVector2d CrystalVertex[4];
 	static int64_t Hash11(const int64_t value);
 	static int64_t Hash21(const FVector2d Vector);
 public:

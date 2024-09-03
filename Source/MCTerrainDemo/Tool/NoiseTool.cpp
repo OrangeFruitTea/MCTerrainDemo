@@ -9,9 +9,6 @@ int64_t NoiseTool::Hash11(const int64_t Value)
 	constexpr uint64_t Multiplier = 0x9E3779B97F4A7C15;
 	uint64_t UnValue = static_cast<uint64_t>(Value);
 	const bool IsNegative = Value < 0;
-	// 如果值是负数，将其转换为正数，并标记符号位
-	if (IsNegative)
-		UnValue = -UnValue;
 	// 使用位运算混合结果
 	uint64_t hash = UnValue * Multiplier;
 	hash ^= hash >> 32;

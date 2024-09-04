@@ -16,10 +16,12 @@ static FVector3d GGradientVector3d[12] = {FVector3d(1,1,0), FVector3d(-1,1,0),FV
 class MCTERRAINDEMO_API NoiseTool
 {
 private:
-	static int64_t Hash11(const int64_t value);
+	static int64_t Hash11(const int64_t Value);
 	static int64_t Hash21(const FVector2d Vector);
+	static int64_t Hash31(const FVector3d Vector);
 public:
 	static void PreHandlePerlinNoise2d(FVector2d Position2d, int32 CrystalSize);
+	static void PreHandlePerlinNoise3d(FVector3d Position3d, int32 CrystalSize);
 	NoiseTool() = delete;
 	~NoiseTool() = delete;
 };

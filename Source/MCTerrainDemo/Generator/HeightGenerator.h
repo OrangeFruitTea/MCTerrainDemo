@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "MCTerrainDemo/Core/Chunk.h"
 
 /**
  * 
@@ -10,7 +11,7 @@
 class MCTERRAINDEMO_API HeightGenerator
 {
 public:
-	static void GenerateDensity();
+	static void GenerateDensity(Chunk& Chunk);
 	HeightGenerator()=delete;
 	~HeightGenerator()=delete;
 };

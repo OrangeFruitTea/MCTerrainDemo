@@ -9,6 +9,11 @@ float NoiseTool::Grad(const FVector2d& Position2d, const FVector2d& Vertex)
 	return FVector2d::DotProduct(Position2d, Vertex);
 }
 
+float NoiseTool::Grad3d(const FVector3d& Position3d, const FVector3d& Vertex)
+{
+	return FVector3d::DotProduct(Position3d, Vertex);
+}
+
 int64_t NoiseTool::Hash11(const int64_t Value)
 {
 	constexpr uint64_t Multiplier = 0x9E3779B97F4A7C15;
@@ -66,7 +71,7 @@ void NoiseTool::PreHandlePerlinNoise3d(const FVector3d& Position3d, const int32 
 	}
 }
 
-float NoiseTool::PerlinNoise2d(const FVector2d Pos)
+float NoiseTool::PerlinNoise2d(const FVector2d& Pos)
 {
 	// 各晶格顶点梯度与距离作点积
 	return FMath::Clamp<float>(
@@ -74,5 +79,21 @@ float NoiseTool::PerlinNoise2d(const FVector2d Pos)
 			FMath::Lerp(Grad(Pos, CrystalVertex[0]), Grad(Pos, CrystalVertex[1]), Pos.X),
 			FMath::Lerp(Grad(Pos, CrystalVertex[2]), Grad(Pos, CrystalVertex[3]), Pos.X),
 			Pos.Y),
+			-1, 1);
+}
+
+float NoiseTool::PerlinNoise3d(const FVector3d& Pos)
+{
+	return FMath::Clamp<float>(
+		FMath::Lerp(
+			FMath::Lerp(
+				FMath::Lerp(Grad3d(Pos, CrystalVertex3d[0]), Grad3d(Pos, CrystalVertex3d[1]), Pos.X),
+				FMath::Lerp(Grad3d(Pos, CrystalVertex3d[2]), Grad3d(Pos, CrystalVertex3d[3]), Pos.X),
+				Pos.Y),
+			FMath::Lerp(
+				FMath::Lerp(Grad3d(Pos, CrystalVertex3d[4]), Grad3d(Pos, CrystalVertex3d[5]), Pos.X),
+				FMath::Lerp(Grad3d(Pos, CrystalVertex3d[6]), Grad3d(Pos, CrystalVertex3d[7]), Pos.X),
+				Pos.Y),
+			Pos.Z),
 			-1, 1);
 }

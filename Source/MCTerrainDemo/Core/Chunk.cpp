@@ -3,8 +3,11 @@
 
 #include "Chunk.h"
 
-Chunk::Chunk()
+
+Chunk::Chunk(FVector2d Position)
+	:BlockDensity{0}
 {
+	ChunkPosition = Position;
 }
 
 Chunk::~Chunk()

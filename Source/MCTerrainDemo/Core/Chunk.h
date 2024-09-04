@@ -4,12 +4,16 @@
 
 #include "CoreMinimal.h"
 
-/**
- * 
- */
+constexpr size_t MaxBlockWidth = 16;
+constexpr size_t MaxBlockHeight = 256;
+
 class MCTERRAINDEMO_API Chunk
 {
 public:
-	Chunk();
+	explicit Chunk(FVector2d ChunkPosition);
 	~Chunk();
+	// chunk位置
+	FVector2d ChunkPosition;
+	// chunk地形密度[-1.f, 1.f]
+	float BlockDensity[MaxBlockWidth][MaxBlockWidth][MaxBlockHeight];
 };

@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 
 constexpr size_t MaxBlockWidth = 16;
-constexpr size_t MaxBlockHeight = 256;
+constexpr size_t MaxBlockHeight = 64;
 
 class MCTERRAINDEMO_API Chunk
 {

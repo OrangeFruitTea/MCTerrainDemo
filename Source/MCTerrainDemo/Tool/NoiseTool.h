@@ -7,6 +7,7 @@
 static FVector2d GGradientVector2d[8] = {FVector2d(0,1), FVector2d(0,-1), FVector2d(1,0), FVector2d(-1,0),
 										 FVector2d(1,1), FVector2d(1,-1), FVector2d(-1,1), FVector2d(-1,-1)};
 static FVector2d CrystalVertex[4];
+static FVector3d CrystalVertex3d[8];
 static FVector3d GGradientVector3d[12] = {FVector3d(1,1,0), FVector3d(-1,1,0),FVector3d(1,-1,0),FVector3d(-1,-1,0),
 										 FVector3d(1,0,1),FVector3d(-1,0,1),FVector3d(1,0,-1),FVector3d(-1,0,-1),
 										 FVector3d(0,1,1),FVector3d(0,-1,1),FVector3d(0,1,-1),FVector3d(0,-1,-1)};

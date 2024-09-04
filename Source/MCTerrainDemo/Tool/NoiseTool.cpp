@@ -58,7 +58,12 @@ void NoiseTool::PreHandlePerlinNoise3d(const FVector3d& Position3d, const int32 
 	const FVector3d Pi = FVector3d(floor(PosInCrystal.X), floor(PosInCrystal.Y), floor(PosInCrystal.Z));
 	const FVector3d Vertex[8] = {Pi, FVector3d(Pi.X+1, Pi.Y, Pi.Z), FVector3d(Pi.X, Pi.Y+1, Pi.Z),FVector3d(Pi.X, Pi.Y, Pi.Z+1),
 								FVector3d(Pi.X+1, Pi.Y+1, Pi.Z),FVector3d(Pi.X+1, Pi.Y, Pi.Z+1),FVector3d(Pi.X, Pi.Y+1, Pi.Z+1),FVector3d(Pi.X+1, Pi.Y+1, Pi.Z+1)};
-
+	int64_t Index = 0;
+	for(int i = 0; i < 8; i++)
+	{
+		Index = Hash31(Vertex[i]) % 12;
+		CrystalVertex3d[i] = GGradientVector3d[Index];
+	}
 }
 
 float NoiseTool::PerlinNoise2d(const FVector2d Pos)

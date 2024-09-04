@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "MCTerrainDemo/Core/Chunk.h"
+#include "MCTerrainDemo/Generator/HeightGenerator.h"
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"

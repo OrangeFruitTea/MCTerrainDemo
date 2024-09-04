@@ -16,5 +16,4 @@ public:
 	FVector2d ChunkPosition;
 	// chunk地形密度[-1.f, 1.f]
 	float BlockDensity[MaxBlockWidth][MaxBlockWidth][MaxBlockHeight];
-	void TestGenerateChunk() const;
 };

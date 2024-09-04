@@ -16,8 +16,10 @@ static FVector3d GFaceDir_Offset_Up = FVector3d(0.f ,0.f, GFaceDir_Offset_Offset
 static FVector3d GFaceDir_Offset_Dwn = -GFaceDir_Offset_Dwn;
 static FVector3d GFaceDir_Offset_Dir[6] = {GFaceDir_Offset_Fwd, GFaceDir_Offset_Bwd, GFaceDir_Offset_R, GFaceDir_Offset_L, GFaceDir_Offset_Up,GFaceDir_Offset_Dwn};
 
-static FString FilePath_M_B_Translucent = TEXT("/Game/MCTerrainDemo/Content/Materials/Blocks/M_B_Translucent");
-static UMaterialInterface* M_Translucent = LoadObject<UMaterialInterface>(nullptr, *FilePath_M_B_Translucent);
+// static FString FilePath_M_B_Translucent = TEXT("/Game/MCTerrainDemo/Content/Materials/Blocks/M_B_Translucent");
+// static UMaterialInterface* M_Translucent = LoadObject<UMaterialInterface>(nullptr, *FilePath_M_B_Translucent);
+
+constexpr int32 MAX_BLOCK_NUM = 12;
 
 UCLASS()
 class MCTERRAINDEMO_API ABlock : public AActor
@@ -29,6 +31,10 @@ public:
 	ABlock();
 
 protected:
+	UPROPERTY(EditAnywhere, Category="Setup")
+	UStaticMeshComponent* MeshComponent;
+	// 载入方块网格资源
+	static UStaticMesh* BlockStaticMesh[MAX_BLOCK_NUM];
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 

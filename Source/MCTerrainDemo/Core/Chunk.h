@@ -17,5 +17,4 @@ public:
 	// chunk地形密度[-1.f, 1.f]
 	float BlockDensity[MaxBlockWidth][MaxBlockWidth][MaxBlockHeight];
 	void TestGenerateChunk() const;
-	void TestCreateBlock(FVector3d Pos);
 };

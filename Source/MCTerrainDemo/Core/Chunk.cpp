@@ -2,6 +2,7 @@
 
 
 #include "Chunk.h"
+#include "MCTerrainDemo/Block.h"
 
 
 Chunk::Chunk(FVector2d Position)
@@ -25,9 +26,4 @@ void Chunk::TestGenerateChunk() const
 			// 生成方块
 		}		
 	}
-}
-
-void Chunk::TestCreateBlock(FVector3d Pos)
-{
-	
 }

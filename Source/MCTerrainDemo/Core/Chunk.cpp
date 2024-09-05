@@ -2,7 +2,6 @@
 
 
 #include "Chunk.h"
-#include "MCTerrainDemo/Block.h"
 
 
 Chunk::Chunk(FVector2d Position)
@@ -14,3 +13,4 @@ Chunk::Chunk(FVector2d Position)
 Chunk::~Chunk()
 {
 }
+

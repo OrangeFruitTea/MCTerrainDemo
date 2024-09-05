@@ -6,11 +6,8 @@
 // Sets default values
 ABlock::ABlock()
 {
-	// 禁止每tick调用
+ 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
-	// 初始化staticMesh组件
-	MeshComponent = NewObject<UStaticMeshComponent>(this, TEXT("Block"));
-	this->SetRootComponent(MeshComponent);
 
 }
 

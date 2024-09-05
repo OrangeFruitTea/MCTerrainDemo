@@ -29,6 +29,8 @@ public:
 	ABlock();
 
 protected:
+	UPROPERTY(EditAnywhere, Category="Setup")
+	UStaticMeshComponent* MeshComponent;
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 

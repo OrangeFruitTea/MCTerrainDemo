@@ -8,6 +8,15 @@ ABlock::ABlock()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
+	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
+	MeshComponent->SetupAttachment(GetRootComponent());
+
+	const FString StaticMeshPath = TEXT("/Game/Models/Block.Block");
+	UStaticMesh* LoadedStaticMesh = LoadObject<UStaticMesh>(nullptr, *StaticMeshPath);
+	if (LoadedStaticMesh)
+	{
+		MeshComponent->SetStaticMesh(LoadedStaticMesh);
+	}
 
 }
 

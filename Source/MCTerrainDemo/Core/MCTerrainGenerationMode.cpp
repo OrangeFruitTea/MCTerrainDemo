@@ -29,3 +29,9 @@ void AMCTerrainGenerationMode::TestCreateBlock(const FVector3d& Pos) const
 {
 	GetWorld()->SpawnActor<ABlock>(Pos*100, FRotator::ZeroRotator);
 }
+
+void AMCTerrainGenerationMode::TestGenerateWorld()
+{
+	TestUpdateChunk(TestChunk);
+	TestGenerateChunk(TestChunk);
+}

@@ -13,7 +13,7 @@ void HeightGenerator::GenerateDensity(Chunk* Chunk)
 	// 噪声权重
 	float Weight[3] = {0.12f, 0.22f, 0.66f};
 	// 噪声振幅
-	float MaxHeight[3] = {100.f, 100.f, 100.f};
+	float MaxHeight[3] = {1.f, 1.f, 1.f};
 	// 叠加三次噪声作为区块密度
 	for (int T = 0; T < 3; T++)
 	{
@@ -24,7 +24,7 @@ void HeightGenerator::GenerateDensity(Chunk* Chunk)
 		for (int k = 0; k < MaxBlockHeight; k++)
 		{
 			FVector3d PF = FVector3d(static_cast<float>(i)/MaxBlockWidth/CrystalSize[T], static_cast<float>(j)/MaxBlockWidth/CrystalSize[T], static_cast<float>(k)/MaxBlockHeight/CrystalSize[T]);
-			Chunk->BlockDensity[i][j][k] += (NoiseTool::PerlinNoise3d(PF) * MaxHeight[T] + MaxHeight[T] * Weight[T]);				
+			Chunk->BlockDensity[i][j][k] += (NoiseTool::PerlinNoise3d(PF) * MaxHeight[T]);				
 		}
 					
 	}

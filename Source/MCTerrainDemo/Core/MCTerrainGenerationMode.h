@@ -20,4 +20,7 @@ public:
 	static void TestUpdateChunk(Chunk* Chunk);
 	void TestGenerateChunk(const Chunk* Chunk) const;
 	void TestCreateBlock(const FVector3d& Pos) const;
+
+	UFUNCTION(BlueprintCallable, Category="TestFun")
+	void TestGenerateWorld();
 };

@@ -11,7 +11,7 @@
 class MCTERRAINDEMO_API HeightGenerator
 {
 public:
-	static void GenerateDensity(Chunk* Chunk);
+	static void GenerateDensity(Chunk& Chunk);
 	HeightGenerator()=delete;
 	~HeightGenerator()=delete;
 };

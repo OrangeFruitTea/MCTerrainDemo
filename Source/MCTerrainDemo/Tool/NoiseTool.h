@@ -28,7 +28,7 @@ public:
 	static float PerlinNoise2d(const FVector2d& Pos);
 	static float PerlinNoise3d(const FVector3d& Pos);
 	// 将三维坐标压缩为一维uint64整数
-	static uint64 Index(const int32 X, const int32 Y, const int32 Z);
+	static uint64 Index(const int32 X, const int32 Y, const int32 Z=0);
 	// 将一维uint64整数解压为三维坐标
 	static FVector UnIndex(uint64 Index);
 	NoiseTool() = delete;

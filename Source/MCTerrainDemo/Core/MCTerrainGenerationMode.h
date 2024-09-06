@@ -8,21 +8,21 @@
 #include "GameFramework/GameModeBase.h"
 #include "MCTerrainGenerationMode.generated.h"
 
-/**
- * 
- */
+const int32 WorldRadius = 3;
+
 UCLASS()
 class MCTERRAINDEMO_API AMCTerrainGenerationMode : public AGameModeBase
 {
 	GENERATED_BODY()
-public:
+protected:
 	Chunk* TestChunk = new Chunk(FVector2d(0, 0));
-	TMap<uint64,Chunk*> Chunks;
-	static void UpdateChunk(Chunk* Chunk);
-	static void LoadChunk(Chunk* Chunk);
-	void GenerateChunk(const Chunk* Chunk) const;
+	TMap<uint64,Chunk> Chunks;
+	FVector2d WorldCenterLocation = FVector2d(0, 0);
+	void UpdateChunks();
+	static void LoadChunk(Chunk& Chunk);
+	void GenerateChunk(const Chunk& Chunk) const;
 	void TestCreateBlock(const FVector3d& Pos) const;
-
+public:
 	UFUNCTION(BlueprintCallable, Category="TestFun")
 	void TestGenerateWorld();
 };

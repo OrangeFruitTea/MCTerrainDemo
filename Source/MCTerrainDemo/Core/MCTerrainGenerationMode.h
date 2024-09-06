@@ -23,6 +23,6 @@ protected:
 	void GenerateChunk(const Chunk& Chunk) const;
 	void TestCreateBlock(const FVector3d& Pos) const;
 public:
-	UFUNCTION(BlueprintCallable, Category="TestFun")
+	UFUNCTION(BlueprintCallable, Category="TestFunc")
 	void TestGenerateWorld();
 };

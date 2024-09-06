@@ -98,7 +98,18 @@ float NoiseTool::PerlinNoise3d(const FVector3d& Pos)
 			-1, 1);
 }
 
-uint64 NoiseTool::Index(int32 X, int32 Y, int32 Z)
+uint64 NoiseTool::Index(const int32 X,const int32 Y, const int32 Z)
 {
-	return 0;
+	constexpr int32 Offset = 16384;
+	return (static_cast<uint64>(X+Offset)<<40 | static_cast<uint64>(Y+Offset)<<20 | static_cast<uint64>(Z+Offset));
+}
+
+FVector NoiseTool::UnIndex(uint64 Index)
+{
+	const int32 Offset = 16384;
+	return FVector(
+		int32(Index>>40)-Offset,
+		int32((Index>>20)&0xFFFFF)-Offset,
+		int32(Index&0xFFFFF)-Offset);
+	
 }

@@ -27,7 +27,10 @@ public:
 	static void PreHandlePerlinNoise3d(const FVector3d& Position3d, const int32 CrystalSize);
 	static float PerlinNoise2d(const FVector2d& Pos);
 	static float PerlinNoise3d(const FVector3d& Pos);
-	static uint64 Index(int32 X, int32 Y, int32 Z);
+	// 将三维坐标压缩为一维uint64整数
+	static uint64 Index(const int32 X, const int32 Y, const int32 Z);
+	// 将一维uint64整数解压为三维坐标
+	static FVector UnIndex(uint64 Index);
 	NoiseTool() = delete;
 	~NoiseTool() = delete;
 };

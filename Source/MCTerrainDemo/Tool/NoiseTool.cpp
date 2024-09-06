@@ -3,6 +3,9 @@
 
 #include "NoiseTool.h"
 
+FVector2d GlobalOffset = {};
+FVector GlobalOffset3d = {};
+
 
 float NoiseTool::Grad(const FVector2d& Position2d, const FVector2d& Vertex)
 {
@@ -47,7 +50,6 @@ void NoiseTool::PreHandlePerlinNoise2d(const FVector2d& Position2d, const int32 
 	const FVector2d PosInCrystal = FVector2d(Position2d.X / CrystalSize, Position2d.Y / CrystalSize);
 	const FVector2d Pi = FVector2d(floor(PosInCrystal.X), floor(PosInCrystal.Y));
 	const FVector2d Vertex[4] = {Pi, FVector2d(Pi.X+1, Pi.Y), FVector2d(Pi.X, Pi.Y+1), FVector2d(Pi.X+1, Pi.Y+1)};
-
 	// 根据晶格顶点坐标赋予随机梯度
 	int32 Index = 0;
 	for(int i = 0; i < 4; i++)
@@ -55,6 +57,8 @@ void NoiseTool::PreHandlePerlinNoise2d(const FVector2d& Position2d, const int32 
 		Index = Hash21(Vertex[i]) % 8;
 		CrystalVertex[i] = GGradientVector2d[Index];
 	}
+	// 更新区块的全局偏移
+	GlobalOffset = (Position2d / CrystalSize);
 }
 
 void NoiseTool::PreHandlePerlinNoise3d(const FVector3d& Position3d, const int32 CrystalSize)
@@ -69,6 +73,7 @@ void NoiseTool::PreHandlePerlinNoise3d(const FVector3d& Position3d, const int32 
 		Index = Hash31(Vertex[i]) % 12;
 		CrystalVertex3d[i] = GGradientVector3d[Index];
 	}
+	GlobalOffset3d = (Position3d-Pi*CrystalSize)/ CrystalSize;
 }
 
 float NoiseTool::PerlinNoise2d(const FVector2d& Pos)
@@ -82,8 +87,9 @@ float NoiseTool::PerlinNoise2d(const FVector2d& Pos)
 			-1, 1);
 }
 
-float NoiseTool::PerlinNoise3d(const FVector3d& Pos)
+float NoiseTool::PerlinNoise3d(const FVector3d& Position)
 {
+	FVector3d Pos = Position + GlobalOffset3d;
 	return FMath::Clamp<float>(
 		FMath::Lerp(
 			FMath::Lerp(

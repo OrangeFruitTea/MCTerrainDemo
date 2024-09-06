@@ -4,10 +4,10 @@
 #include "HeightGenerator.h"
 #include "MCTerrainDemo/Tool/NoiseTool.h"
 
-void HeightGenerator::GenerateDensity(Chunk& Chunk)
+void HeightGenerator::GenerateDensity(Chunk* Chunk)
 {
 	// 创建三维变量
-	FVector3d Pos = FVector3d(Chunk.ChunkPosition.X, Chunk.ChunkPosition.Y, 0);
+	FVector3d Pos = FVector3d(Chunk->ChunkPosition.X, Chunk->ChunkPosition.Y, 0);
 	// 噪声晶格大小
 	int32 CrystalSize[3] = {4,16,64};
 	// 噪声权重
@@ -24,7 +24,7 @@ void HeightGenerator::GenerateDensity(Chunk& Chunk)
 		for (int k = 0; k < MaxBlockHeight; k++)
 		{
 			FVector3d PF = FVector3d(static_cast<float>(i)/MaxBlockWidth/CrystalSize[T], static_cast<float>(j)/MaxBlockWidth/CrystalSize[T], static_cast<float>(k)/MaxBlockHeight/CrystalSize[T]);
-			Chunk.BlockDensity[i][j][k] += (NoiseTool::PerlinNoise3d(PF) * MaxHeight[T] + MaxHeight[T] * Weight[T]);				
+			Chunk->BlockDensity[i][j][k] += (NoiseTool::PerlinNoise3d(PF) * MaxHeight[T] + MaxHeight[T] * Weight[T]);				
 		}
 					
 	}

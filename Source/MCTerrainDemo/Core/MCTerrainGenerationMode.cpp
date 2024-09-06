@@ -5,6 +5,11 @@
 
 #include "MCTerrainDemo/Block.h"
 
+void AMCTerrainGenerationMode::TestUpdateChunk(Chunk* Chunk)
+{
+	HeightGenerator::GenerateDensity(Chunk);
+}
+
 void AMCTerrainGenerationMode::TestGenerateChunk(const Chunk* Chunk) const
 {
 	for (int i = 0; i < MaxBlockWidth; i++)

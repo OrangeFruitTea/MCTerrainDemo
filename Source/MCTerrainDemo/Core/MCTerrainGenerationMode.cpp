@@ -34,7 +34,8 @@ void AMCTerrainGenerationMode::GenerateChunk(const Chunk& Chunk) const
 	for(int j = 0; j < MaxBlockWidth; j++)
 	for (int k = 0; k < MaxBlockHeight; k++)
 	{
-		if (Chunk.BlockDensity[i][j][k] > 0.f)
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Block Density: %f"), Chunk.BlockDensity[i][j][k]));
+		if (Chunk.BlockDensity[i][j][k] > 0.7f)
 		{
 			// 生成方块
 			FVector3d Pos = FVector3d(Chunk.ChunkPosition.X*16+i, Chunk.ChunkPosition.Y*16+j, k);

@@ -14,30 +14,30 @@ float NoiseTool::Grad3d(const FVector3d& Position3d, const FVector3d& Vertex)
 	return FVector3d::DotProduct(Position3d, Vertex);
 }
 
-int64_t NoiseTool::Hash11(const int64_t Value)
+int32 NoiseTool::Hash11(const int32 Value)
 {
-	constexpr uint64_t Multiplier = 0x9E3779B97F4A7C15;
-	uint64_t UnValue = static_cast<uint64_t>(Value);
+	constexpr uint32 Multiplier = 0x9E3779B9;
+	uint32 UnValue = static_cast<uint32>(Value);
 	const bool IsNegative = Value < 0;
 	// 使用位运算混合结果
-	uint64_t hash = UnValue * Multiplier;
-	hash ^= hash >> 32;
-	hash *= 0x6C078965B58C4E61;
-	hash ^= hash >> 27;
+	uint32 hash = UnValue * Multiplier;
+	hash ^= hash >> 16;
+	hash *= 0x6C07A965;
+	hash ^= hash >> 3;
 	// 如果原始值是负数，通过XOR操作添加一个模式来区分哈希值
 	if (IsNegative)
-		hash ^= 0x8000000000000000; // XOR操作一个模式，确保负数和正数的哈希值不同
+		hash ^= 0x80000000; // XOR操作一个模式，确保负数和正数的哈希值不同
 	return hash;
 }
 
-int64_t NoiseTool::Hash21(const FVector2d& Vector)
+int32 NoiseTool::Hash21(const FVector2d& Vector)
 {
-	return (0x9E3779B97F4A7C15 * static_cast<int64_t>(Vector.X) + static_cast<int64_t>(Vector.Y)) % 1024;
+	return (0x9E3779B9* static_cast<int32>(Vector.X) + static_cast<int32>(Vector.Y)) % 1024;
 }
 
-int64_t NoiseTool::Hash31(const FVector3d& Vector)
+int32 NoiseTool::Hash31(const FVector3d& Vector)
 {
-	return (0x9E3779B97F4A7C15 * static_cast<int64_t>(Vector.X) + 0x6C078965B58C4E61 * static_cast<int64_t>(Vector.Y) + static_cast<int64_t>(Vector.Z)) % 1024;
+	return (0x9E3779B9* static_cast<int32>(Vector.X) + 0x6C078965* static_cast<int32>(Vector.Y) + static_cast<int32>(Vector.Z)) % 1024;
 }
 
 void NoiseTool::PreHandlePerlinNoise2d(const FVector2d& Position2d, const int32 CrystalSize)
@@ -49,7 +49,7 @@ void NoiseTool::PreHandlePerlinNoise2d(const FVector2d& Position2d, const int32 
 	const FVector2d Vertex[4] = {Pi, FVector2d(Pi.X+1, Pi.Y), FVector2d(Pi.X, Pi.Y+1), FVector2d(Pi.X+1, Pi.Y+1)};
 
 	// 根据晶格顶点坐标赋予随机梯度
-	int64_t Index = 0;
+	int32 Index = 0;
 	for(int i = 0; i < 4; i++)
 	{
 		Index = Hash21(Vertex[i]) % 8;
@@ -63,7 +63,7 @@ void NoiseTool::PreHandlePerlinNoise3d(const FVector3d& Position3d, const int32 
 	const FVector3d Pi = FVector3d(floor(PosInCrystal.X), floor(PosInCrystal.Y), floor(PosInCrystal.Z));
 	const FVector3d Vertex[8] = {Pi, FVector3d(Pi.X+1, Pi.Y, Pi.Z), FVector3d(Pi.X, Pi.Y+1, Pi.Z),FVector3d(Pi.X, Pi.Y, Pi.Z+1),
 								FVector3d(Pi.X+1, Pi.Y+1, Pi.Z),FVector3d(Pi.X+1, Pi.Y, Pi.Z+1),FVector3d(Pi.X, Pi.Y+1, Pi.Z+1),FVector3d(Pi.X+1, Pi.Y+1, Pi.Z+1)};
-	int64_t Index = 0;
+	int32 Index = 0;
 	for(int i = 0; i < 8; i++)
 	{
 		Index = Hash31(Vertex[i]) % 12;
@@ -96,4 +96,9 @@ float NoiseTool::PerlinNoise3d(const FVector3d& Pos)
 				Pos.Y),
 			Pos.Z),
 			-1, 1);
+}
+
+uint64 NoiseTool::Index(int32 X, int32 Y, int32 Z)
+{
+	return 0;
 }

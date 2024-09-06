@@ -19,14 +19,15 @@ class MCTERRAINDEMO_API NoiseTool
 private:
 	static float Grad(const FVector2d& Position2d, const FVector2d& Vertex);
 	static float Grad3d(const FVector3d& Position3d, const FVector3d& Vertex);
-	static int64_t Hash11(const int64_t Value);
-	static int64_t Hash21(const FVector2d& Vector);
-	static int64_t Hash31(const FVector3d& Vector);
+	static int32 Hash11(const int32 Value);
+	static int32 Hash21(const FVector2d& Vector);
+	static int32 Hash31(const FVector3d& Vector);
 public:
 	static void PreHandlePerlinNoise2d(const FVector2d& Position2d, const int32 CrystalSize);
 	static void PreHandlePerlinNoise3d(const FVector3d& Position3d, const int32 CrystalSize);
 	static float PerlinNoise2d(const FVector2d& Pos);
 	static float PerlinNoise3d(const FVector3d& Pos);
+	static uint64 Index(int32 X, int32 Y, int32 Z);
 	NoiseTool() = delete;
 	~NoiseTool() = delete;
 };

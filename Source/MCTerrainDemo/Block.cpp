@@ -17,16 +17,13 @@ ABlock::ABlock()
 	{
 		MeshComponent->SetStaticMesh(LoadedStaticMesh);
 	}
-	SetActorScale3D(FVector(0.1f, 0.1f, 0.1f));
-	MeshComponent->SetRelativeScale3D(FVector(0.2f,0.2f,0.2f));
+	MeshComponent->SetRelativeScale3D(FVector(0.5f,0.5f,0.5f));
 }
 
 // Called when the game starts or when spawned
 void ABlock::BeginPlay()
 {
 	Super::BeginPlay();
-	FVector Scale = GetActorScale3D();
-	DrawDebugString(GetWorld(), GetActorScale3D(), FString::Printf(TEXT("Scale: %f, %f, %f"), Scale.X, Scale.Y, Scale.Z), nullptr, FColor::Red, 10.f);
 }
 
 void ABlock::UpdateVisibility()

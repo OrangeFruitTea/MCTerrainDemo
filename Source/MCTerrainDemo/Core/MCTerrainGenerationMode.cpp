@@ -5,12 +5,16 @@
 
 #include "MCTerrainDemo/Block.h"
 
-void AMCTerrainGenerationMode::TestUpdateChunk(Chunk* Chunk)
+void AMCTerrainGenerationMode::UpdateChunk(Chunk* Chunk)
+{
+}
+
+void AMCTerrainGenerationMode::LoadChunk(Chunk* Chunk)
 {
 	HeightGenerator::GenerateDensity(Chunk);
 }
 
-void AMCTerrainGenerationMode::TestGenerateChunk(const Chunk* Chunk) const
+void AMCTerrainGenerationMode::GenerateChunk(const Chunk* Chunk) const
 {
 	for (int i = 0; i < MaxBlockWidth; i++)
 	for(int j = 0; j < MaxBlockWidth; j++)
@@ -32,6 +36,6 @@ void AMCTerrainGenerationMode::TestCreateBlock(const FVector3d& Pos) const
 
 void AMCTerrainGenerationMode::TestGenerateWorld()
 {
-	TestUpdateChunk(TestChunk);
-	TestGenerateChunk(TestChunk);
+	LoadChunk(TestChunk);
+	GenerateChunk(TestChunk);
 }

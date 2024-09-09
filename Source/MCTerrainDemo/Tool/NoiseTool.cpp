@@ -7,6 +7,21 @@ FVector2d GlobalOffset = {};
 FVector GlobalOffset3d = {};
 
 
+void NoiseTool::RandomPermWithSeed(int32 Seed)
+{
+	FRandomStream RandomStream(Seed);
+	for (int i = 0; i < 256; i++)
+	{
+		Perm[i] = RandomStream.GetUnsignedInt() % 256;
+	}
+}
+
+void NoiseTool::RandomPerm()
+{
+	const int32 Seed = FPlatformTime::Cycles();
+	RandomPermWithSeed(Seed);
+}
+
 float NoiseTool::Grad(const FVector2d& Position2d, const FVector2d& Vertex)
 {
 	return FVector2d::DotProduct(Position2d, Vertex);
@@ -43,6 +58,11 @@ int32 NoiseTool::Hash31(const FVector3d& Vector)
 	return (0x9E3779B9* static_cast<int32>(Vector.X) + 0x6C078965* static_cast<int32>(Vector.Y) + static_cast<int32>(Vector.Z)) % 1024;
 }
 
+float NoiseTool::Fade(const float T)
+{
+	return T*T*T*(T*(T*6-15)+10);
+}
+
 void NoiseTool::PreHandlePerlinNoise2d(const FVector2d& Position2d, const int32 CrystalSize)
 {
 	// 根据给定点世界坐标与晶格大小确定给定点所在的晶格
@@ -59,6 +79,21 @@ void NoiseTool::PreHandlePerlinNoise2d(const FVector2d& Position2d, const int32 
 	}
 	// 更新区块的全局偏移
 	GlobalOffset = (Position2d / CrystalSize);
+}
+
+void NoiseTool::PreHandlePerlinNoise3d(float X, float Y, float Z, const int32 CrystalSize)
+{
+	// 获取晶格所属位置
+	int32 PiX = floor(X / CrystalSize);
+	int32 PiY = floor(Y / CrystalSize);
+	int32 PiZ = floor(Z / CrystalSize);
+	// 晶格内部偏移
+	float x = X - PiX;
+	float y = Y - PiY;
+	float z = Z - PiZ;
+	float u = Fade(x);
+	float v = Fade(y);
+	float w = Fade(z);
 }
 
 void NoiseTool::PreHandlePerlinNoise3d(const FVector3d& Position3d, const int32 CrystalSize)
@@ -86,6 +121,11 @@ float NoiseTool::PerlinNoise2d(const FVector2d& Pos)
 			FMath::Lerp(Grad(Pos, CrystalVertex[2]), Grad(Pos, CrystalVertex[3]), Pos.X),
 			Pos.Y),
 			-1, 1);
+}
+
+float NoiseTool::PerlinNoise3d(float X, float Y, float Z)
+{
+	return 0;
 }
 
 float NoiseTool::PerlinNoise3d(const FVector3d& Position)

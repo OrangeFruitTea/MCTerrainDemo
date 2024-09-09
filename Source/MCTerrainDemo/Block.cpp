@@ -26,9 +26,5 @@ void ABlock::BeginPlay()
 	Super::BeginPlay();
 }
 
-void ABlock::UpdateVisibility()
-{
-	FVector3d Location = GetActorLocation();
-}
 
 

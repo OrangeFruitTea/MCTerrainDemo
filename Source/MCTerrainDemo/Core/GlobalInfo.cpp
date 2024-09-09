@@ -14,7 +14,6 @@ GlobalInfo::~GlobalInfo()
 void GlobalInfo::AddBlock(const FVector& Pos, int32 BlockID)
 {
 	uint64 Index = NoiseTool::Index(Pos.X, Pos.Y, Pos.Z);
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Index:%llu"), Index));
 	GlobalBlocks.Emplace(Index, BlockID);
 	Blocks2Display.Emplace(Index, BlockID);
 }

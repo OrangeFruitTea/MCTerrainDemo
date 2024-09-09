@@ -72,7 +72,7 @@ void NoiseTool::PreHandlePerlinNoise3d(const FVector3d& Position3d, const int32 
 	{
 		Index = Hash31(Vertex[i]) % 12;
 		CrystalVertex3d[i] = GGradientVector3d[Index];
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Crystal Vertex: (%f, %f, %f)"), CrystalVertex3d[i].X, CrystalVertex3d[i].Y, CrystalVertex3d[i].Z));
+		// GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Crystal Vertex: (%f, %f, %f)"), CrystalVertex3d[i].X, CrystalVertex3d[i].Y, CrystalVertex3d[i].Z));
 	}
 	GlobalOffset3d = (Position3d-Pi*CrystalSize)/ CrystalSize;
 }

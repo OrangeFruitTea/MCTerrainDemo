@@ -18,7 +18,7 @@ void HeightGenerator::GenerateDensity(Chunk& Chunk)
 	for (int T = 0; T < 3; T++)
 	{
 		// 预处理柏林噪声
-		NoiseTool::PreHandlePerlinNoise3d(Pos, CrystalSize[T]);
+		NoiseTool::PreHandlePerlinNoise3d(FVector(Chunk.ChunkPosition.X, Chunk.ChunkPosition.Y, 1), CrystalSize[T]);
 		for (int i = 0; i < MaxBlockWidth; i++)
 		for (int j = 0; j < MaxBlockWidth; j++)
 		for (int k = 0; k < MaxBlockHeight; k++)
@@ -26,7 +26,6 @@ void HeightGenerator::GenerateDensity(Chunk& Chunk)
 			FVector3d PF = FVector3d(static_cast<float>(i)/MaxBlockWidth/CrystalSize[T], static_cast<float>(j)/MaxBlockWidth/CrystalSize[T], static_cast<float>(k)/MaxBlockHeight/CrystalSize[T]);
 			Chunk.BlockDensity[i][j][k] += (NoiseTool::PerlinNoise3d(PF) * Weight[T]) * 10;				
 		}
-					
 	}
 	
 }

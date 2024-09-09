@@ -15,12 +15,17 @@ class MCTERRAINDEMO_API AMCTerrainGenerationMode : public AGameModeBase
 {
 	GENERATED_BODY()
 protected:
-	Chunk* TestChunk = new Chunk(FVector2d(0, 0));
-	TMap<uint64,Chunk> Chunks;
+	// 世界中心位置
 	FVector2d WorldCenterLocation = FVector2d(0, 0);
+	// world中的所有chunk
+	TMap<uint64,Chunk> Chunks;
+	// 更新chunk
 	void UpdateChunks();
+	// 加载输入chunk的数据信息 (密度等)
 	static void LoadChunk(Chunk& Chunk);
+	// 根据chunk的数据信息生成chunk中的方块
 	void GenerateChunk(const Chunk& Chunk) const;
+	// 生成单个方块
 	void TestCreateBlock(const FVector3d& Pos) const;
 public:
 	UFUNCTION(BlueprintCallable, Category="TestFunc")

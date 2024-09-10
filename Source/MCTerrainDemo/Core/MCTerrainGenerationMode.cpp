@@ -36,7 +36,7 @@ void AMCTerrainGenerationMode::DisplayChunk(const Chunk& Chunk)
 	for (int k = 0; k < MaxBlockHeight; k++)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Block Density: %f"), Chunk.BlockDensity[i][j][k]));
-		if (Chunk.BlockDensity[i][j][k] > 0.7f)
+		if (Chunk.BlockDensity[i][j][k] > 0.75f)
 		{
 			// 将方块信息导入GlobalInfo中
 			FVector3d Pos = FVector3d(Chunk.ChunkPosition.X*16+i, Chunk.ChunkPosition.Y*16+j, k);

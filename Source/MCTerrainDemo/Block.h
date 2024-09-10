@@ -18,6 +18,7 @@ public:
 protected:
 	UPROPERTY(EditAnywhere, Category="Setup")
 	UStaticMeshComponent* MeshComponent;
+	// UPROPERTY(EditAnywhere, Category="Setup")
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 

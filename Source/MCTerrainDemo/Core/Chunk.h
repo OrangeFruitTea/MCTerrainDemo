@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "MCTerrainDemo/Core/ChunkActor.h"
 
 constexpr size_t MaxBlockWidth = 16;
 constexpr size_t MaxBlockHeight = 16;
@@ -18,4 +19,7 @@ public:
 	FVector2d ChunkPosition;
 	// chunk地形密度[-1.f, 1.f]
 	float BlockDensity[MaxBlockWidth][MaxBlockWidth][MaxBlockHeight];
+	// chunk Actor
+	AChunkActor* ChunkActor;
+	
 };

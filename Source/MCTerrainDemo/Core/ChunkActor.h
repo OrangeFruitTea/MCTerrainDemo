@@ -15,14 +15,13 @@ class MCTERRAINDEMO_API AChunkActor : public AActor
 {
 	GENERATED_BODY()
 private:
-	Chunk* ChunkInfo;
 public:
 	UPROPERTY(EditAnywhere, Category="Setup")
 	UProceduralMeshComponent* ProceduralMesh;
 	
 public:
 	AChunkActor();
-	AChunkActor(Chunk* ChunkData);
+	void InitChunkActor(float X, float Y);
 
 protected:
 	virtual void BeginPlay() override;

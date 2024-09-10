@@ -7,23 +7,21 @@ AChunkActor::AChunkActor()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	ChunkInfo = nullptr;
 	FString String = "ChunkActor_Test";
-	ProceduralMesh = CreateDefaultSubobject<UProceduralMeshComponent>(TEXT("MeshComponent"));
+	FName Name = FName(String);
+	ProceduralMesh = CreateDefaultSubobject<UProceduralMeshComponent>(Name);
 	ProceduralMesh->RegisterComponent();
 	SetRootComponent(ProceduralMesh);
 }
 
-// Sets default values
-AChunkActor::AChunkActor(Chunk* ChunkData)
+void AChunkActor::InitChunkActor(float X, float Y)
 {
-	PrimaryActorTick.bCanEverTick = true;
-
-	ChunkInfo = ChunkData;
-	FString String = "ChunkActor_" + FString::FromInt(ChunkInfo->ChunkPosition.X) + "_" + FString::FromInt(ChunkInfo->ChunkPosition.Y);
-	ProceduralMesh = CreateDefaultSubobject<UProceduralMeshComponent>(TEXT("MeshComponent"));
+	FString String = "ChunkActor_" + FString::FromInt(X) + "_" + FString::FromInt(Y);
+	FName Name = FName(String);
+	ProceduralMesh = CreateDefaultSubobject<UProceduralMeshComponent>(Name);
 	ProceduralMesh->RegisterComponent();
 	SetRootComponent(ProceduralMesh);
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, String);
 }
 
 // Called when the game starts or when spawned

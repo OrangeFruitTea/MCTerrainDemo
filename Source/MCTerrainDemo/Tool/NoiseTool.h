@@ -16,7 +16,7 @@ static FVector3d GGradientVector3d[12] = {FVector3d(1,1,0), FVector3d(-1,1,0),FV
 class MCTERRAINDEMO_API NoiseTool
 {
 private:
-	int32 Perm[256] = {
+	inline static int32 Perm[256] = {
 	  251, 72, 117, 203, 66, 160, 157, 188, 94, 56, 178, 237, 33, 221, 77,
 	  49, 18, 153, 107, 4, 81, 166, 248, 95, 35, 59, 93, 113, 65, 126, 190,
 	  202, 54, 79, 39, 149, 16, 211, 37, 46, 6, 61, 51, 42, 84, 163, 139,
@@ -38,6 +38,7 @@ private:
 	void RandomPermWithSeed(int32 Seed);
 	void RandomPerm();
 	static float Grad(const FVector2d& Position2d, const FVector2d& Vertex);
+	static float Grad3d(float X, float Y, float Z, int Hash);
 	static float Grad3d(const FVector3d& Position3d, const FVector3d& Vertex);
 	static int32 Hash11(const int32 Value);
 	static int32 Hash21(const FVector2d& Vector);
@@ -45,7 +46,7 @@ private:
 	static float Fade(const float T);
 public:
 	static void PreHandlePerlinNoise2d(const FVector2d& Position2d, const int32 CrystalSize);
-	static void PreHandlePerlinNoise3d(float X, float Y, float Z, const int32 CrystalSize);
+	static float HandlePerlinNoise3d(float X, float Y, float Z, const int32 CrystalSize);
 	static void PreHandlePerlinNoise3d(const FVector3d& Position3d, const int32 CrystalSize);
 	static float PerlinNoise2d(const FVector2d& Pos);
 	static float PerlinNoise3d(float X, float Y, float Z);

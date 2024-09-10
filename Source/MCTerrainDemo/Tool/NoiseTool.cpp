@@ -27,6 +27,14 @@ float NoiseTool::Grad(const FVector2d& Position2d, const FVector2d& Vertex)
 	return FVector2d::DotProduct(Position2d, Vertex);
 }
 
+float NoiseTool::Grad3d(float X, float Y, float Z, int Hash)
+{
+	int h = Hash & 15;
+	int u = h < 8 ? X : Y;
+	int v = h < 4 ? Y : (h == 12 || h == 14 ? X : Z);
+	return ((h & 1) == 0 ? u : -u) + ((h & 2) == 0 ? v : -v);
+}
+
 float NoiseTool::Grad3d(const FVector3d& Position3d, const FVector3d& Vertex)
 {
 	return FVector3d::DotProduct(Position3d, Vertex);
@@ -81,7 +89,7 @@ void NoiseTool::PreHandlePerlinNoise2d(const FVector2d& Position2d, const int32 
 	GlobalOffset = (Position2d / CrystalSize);
 }
 
-void NoiseTool::PreHandlePerlinNoise3d(float X, float Y, float Z, const int32 CrystalSize)
+float NoiseTool::HandlePerlinNoise3d(float X, float Y, float Z, const int32 CrystalSize)
 {
 	// 获取晶格所属位置
 	int32 PiX = floor(X / CrystalSize);
@@ -94,6 +102,31 @@ void NoiseTool::PreHandlePerlinNoise3d(float X, float Y, float Z, const int32 Cr
 	float u = Fade(x);
 	float v = Fade(y);
 	float w = Fade(z);
+	int A = (Perm[PiX] + Y);
+	int B = (Perm[PiX+1] + Y);
+	int AA = (Perm[A] + Z);
+	int BA = (Perm[B] + Z);
+	int AB = (Perm[A+1] + Z);
+	int BB = (Perm[B+1] + Z);
+	return FMath::Lerp(
+					FMath::Lerp(
+						FMath::Lerp(Grad3d(x, y, z, Perm[AA]),
+									Grad3d(x-1, y, z, Perm[BA]),
+									u),
+						FMath::Lerp(Grad3d(x, y-1, z, Perm[AB]),
+									Grad3d(x-1, y-1, z, Perm[BB]),
+									u),
+						v),
+					FMath::Lerp(
+						FMath::Lerp(Grad3d(x, y, z-1, Perm[AA+1]),
+									Grad3d(x-1, y, z-1, Perm[BA+1]),
+									u),
+						FMath::Lerp(Grad3d(x, y-1, z-1, Perm[AB+1]),
+									Grad3d(x-1, y-1, z-1, Perm[BB+1]),
+									u),
+						v),
+					w);
+	
 }
 
 void NoiseTool::PreHandlePerlinNoise3d(const FVector3d& Position3d, const int32 CrystalSize)

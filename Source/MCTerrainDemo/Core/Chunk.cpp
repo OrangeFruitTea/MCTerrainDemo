@@ -4,8 +4,9 @@
 #include "Chunk.h"
 
 
-Chunk::Chunk(FVector2d Position)
-	:BlockDensity{0}
+Chunk::Chunk(int32 X, int32 Y, FVector2d Position)
+	:BlockDensity{0},
+	Index{X, Y}
 {
 	ChunkPosition = Position;
 }

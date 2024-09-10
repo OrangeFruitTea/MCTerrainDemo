@@ -15,10 +15,11 @@ void AMCTerrainGenerationMode::UpdateChunks()
 		uint64 Index = NoiseTool::Index(ChunkPosition.X, ChunkPosition.Y);
 		if (!Chunks.Contains(Index))
 		{
-			Chunks.Emplace(Index, Chunk(ChunkPosition));
+			Chunks.Emplace(Index, Chunk(i, j, ChunkPosition));
 			Chunk& NewChunk = Chunks[Index];
 			LoadChunk(NewChunk);
 			DisplayChunk(NewChunk);
+			
 		}
 	}
 }

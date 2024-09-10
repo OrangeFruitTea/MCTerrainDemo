@@ -4,7 +4,7 @@
 
 #include "MCTerrainDemo/Generator/HeightGenerator.h"
 #include "MCTerrainDemo/Core/GlobalInfo.h"
-
+#include "MCTerrainDemo/Core/ChunkActor.h"
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
 #include "MCTerrainGenerationMode.generated.h"

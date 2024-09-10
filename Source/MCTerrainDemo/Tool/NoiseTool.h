@@ -54,8 +54,10 @@ public:
 	static float PerlinNoise3d(float X, float Y, float Z);
 	static float PerlinNoise3d(const FVector3d& Pos);
 	// 计算倍频噪声值
-	static float Fbm(FVector2d, int Octave);
+	static float Fbm(const FVector2d&, int Octave);
 	static float Fbm(float X, float Y, int Octave);
+	static float Fbm(const FVector3d&, int Octave);
+	static float Fbm(float X, float Y, float Z, int Octave);
 	// 将三维坐标压缩为一维uint64整数
 	static uint64 Index(const int32 X, const int32 Y, const int32 Z=0);
 	// 将一维uint64整数解压为三维坐标

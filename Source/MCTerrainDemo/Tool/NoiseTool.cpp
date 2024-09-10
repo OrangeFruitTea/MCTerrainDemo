@@ -79,10 +79,9 @@ void NoiseTool::PreHandlePerlinNoise2d(const FVector2d& Position2d, const int32 
 	const FVector2d Pi = FVector2d(floor(PosInCrystal.X), floor(PosInCrystal.Y));
 	const FVector2d Vertex[4] = {Pi, FVector2d(Pi.X+1, Pi.Y), FVector2d(Pi.X, Pi.Y+1), FVector2d(Pi.X+1, Pi.Y+1)};
 	// 根据晶格顶点坐标赋予随机梯度
-	int32 Index = 0;
 	for(int i = 0; i < 4; i++)
 	{
-		Index = Hash21(Vertex[i]) % 8;
+		int Index = Hash21(Vertex[i]) % 8;
 		CrystalVertex[i] = GGradientVector2d[Index];
 	}
 	// 更新区块的全局偏移
@@ -129,20 +128,23 @@ float NoiseTool::HandlePerlinNoise3d(float X, float Y, float Z, const int32 Crys
 	
 }
 
-void NoiseTool::PreHandlePerlinNoise3d(const FVector3d& Position3d, const int32 CrystalSize)
+void NoiseTool::PreHandlePerlinNoise3d(float X, float Y, float Z, const int32 CrystalSize)
 {
-	const FVector3d PosInCrystal = FVector3d(Position3d.X / CrystalSize, Position3d.Y / CrystalSize, Position3d.Z / CrystalSize);
-	const FVector3d Pi = FVector3d(floor(PosInCrystal.X), floor(PosInCrystal.Y), floor(PosInCrystal.Z));
+	const FVector Pi = FVector(floor(X / CrystalSize),floor(Y / CrystalSize),floor(Z / CrystalSize));
 	const FVector3d Vertex[8] = {Pi, FVector3d(Pi.X+1, Pi.Y, Pi.Z), FVector3d(Pi.X, Pi.Y+1, Pi.Z),FVector3d(Pi.X, Pi.Y, Pi.Z+1),
 								FVector3d(Pi.X+1, Pi.Y+1, Pi.Z),FVector3d(Pi.X+1, Pi.Y, Pi.Z+1),FVector3d(Pi.X, Pi.Y+1, Pi.Z+1),FVector3d(Pi.X+1, Pi.Y+1, Pi.Z+1)};
-	int32 Index = 0;
 	for(int i = 0; i < 8; i++)
 	{
-		Index = Hash31(Vertex[i]) % 12;
+		int Index = Hash31(Vertex[i]) % 12;
 		CrystalVertex3d[i] = GGradientVector3d[Index];
 		// GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Crystal Vertex: (%f, %f, %f)"), CrystalVertex3d[i].X, CrystalVertex3d[i].Y, CrystalVertex3d[i].Z));
 	}
-	GlobalOffset3d = (Position3d-Pi*CrystalSize)/ CrystalSize;
+	GlobalOffset3d = (FVector(X,Y,Z)-Pi*CrystalSize)/ CrystalSize;
+}
+
+void NoiseTool::PreHandlePerlinNoise3d(const FVector3d& Position3d, const int32 CrystalSize)
+{
+	PreHandlePerlinNoise3d(Position3d.X,Position3d.Y,Position3d.Z,CrystalSize);
 }
 
 float NoiseTool::PerlinNoise2d(const FVector2d& Pos)
@@ -150,9 +152,9 @@ float NoiseTool::PerlinNoise2d(const FVector2d& Pos)
 	// 各晶格顶点梯度与距离作点积
 	return FMath::Clamp<float>(
 		FMath::Lerp(
-			FMath::Lerp(Grad(Pos, CrystalVertex[0]), Grad(Pos, CrystalVertex[1]), Pos.X),
-			FMath::Lerp(Grad(Pos, CrystalVertex[2]), Grad(Pos, CrystalVertex[3]), Pos.X),
-			Pos.Y),
+			FMath::Lerp(Grad(Pos, CrystalVertex[0]), Grad(Pos, CrystalVertex[1]), Fade(Pos.X)),
+			FMath::Lerp(Grad(Pos, CrystalVertex[2]), Grad(Pos, CrystalVertex[3]), Fade(Pos.X)),
+			Fade(Pos.Y)),
 			-1, 1);
 }
 
@@ -167,14 +169,14 @@ float NoiseTool::PerlinNoise3d(const FVector3d& Position)
 	return FMath::Clamp<float>(
 		FMath::Lerp(
 			FMath::Lerp(
-				FMath::Lerp(Grad3d(Pos, CrystalVertex3d[0]), Grad3d(Pos, CrystalVertex3d[1]), Pos.X),
-				FMath::Lerp(Grad3d(Pos, CrystalVertex3d[2]), Grad3d(Pos, CrystalVertex3d[3]), Pos.X),
-				Pos.Y),
+				FMath::Lerp(Grad3d(Pos, CrystalVertex3d[0]), Grad3d(Pos, CrystalVertex3d[1]), Fade(Pos.X)),
+				FMath::Lerp(Grad3d(Pos, CrystalVertex3d[2]), Grad3d(Pos, CrystalVertex3d[3]), Fade(Pos.X)),
+				Fade(Pos.Y)),
 			FMath::Lerp(
-				FMath::Lerp(Grad3d(Pos, CrystalVertex3d[4]), Grad3d(Pos, CrystalVertex3d[5]), Pos.X),
-				FMath::Lerp(Grad3d(Pos, CrystalVertex3d[6]), Grad3d(Pos, CrystalVertex3d[7]), Pos.X),
-				Pos.Y),
-			Pos.Z),
+				FMath::Lerp(Grad3d(Pos, CrystalVertex3d[4]), Grad3d(Pos, CrystalVertex3d[5]), Fade(Pos.X)),
+				FMath::Lerp(Grad3d(Pos, CrystalVertex3d[6]), Grad3d(Pos, CrystalVertex3d[7]), Fade(Pos.X)),
+				Fade(Pos.Y)),
+			Fade(Pos.Z)),
 			-1, 1);
 }
 

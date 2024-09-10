@@ -47,6 +47,7 @@ private:
 public:
 	static void PreHandlePerlinNoise2d(const FVector2d& Position2d, const int32 CrystalSize);
 	static float HandlePerlinNoise3d(float X, float Y, float Z, const int32 CrystalSize);
+	static void PreHandlePerlinNoise3d(float X, float Y, float Z, const int32 CrystalSize);
 	static void PreHandlePerlinNoise3d(const FVector3d& Position3d, const int32 CrystalSize);
 	static float PerlinNoise2d(const FVector2d& Pos);
 	static float PerlinNoise3d(float X, float Y, float Z);

@@ -18,12 +18,14 @@ void AMCTerrainGenerationMode::UpdateChunks()
 		{
 			Chunks.Emplace(Index, Chunk(i, j, ChunkPosition));
 			Chunk& NewChunk = Chunks[Index];
+			HeightGenerator::GenerateDensity(NewChunk);
 			AChunkActor* NewChunkActor = GetWorld()->SpawnActor<AChunkActor>(AChunkActor::StaticClass());
-			NewChunkActor->InitChunkActor(NewChunk.Index.Key, NewChunk.Index.Value);
+			NewChunkActor->InitChunkActor(&NewChunk);
 			NewChunkActor->SetActorLocation(PosInput);
 			ChunkActors2Display.Emplace(NewChunkActor);
 			// LoadChunk(NewChunk);
 			// DisplayChunk(NewChunk);
+			NewChunkActor->RenderMesh();
 		}
 	}
 }

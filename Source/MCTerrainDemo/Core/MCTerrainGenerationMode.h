@@ -23,7 +23,9 @@ protected:
 	// world中的所有chunk
 	TMap<uint64,Chunk> Chunks;
 	// 用于显示的chunk
-	TSet<Chunk*> CHunks2Display;
+	TSet<Chunk*> Chunks2Display;
+	// 用于显示的chunk actor
+	TArray<TWeakObjectPtr<AChunkActor>> ChunkActors2Display;
 	// 更新chunk
 	void UpdateChunks();
 	// 加载输入chunk的数据信息 (密度等)

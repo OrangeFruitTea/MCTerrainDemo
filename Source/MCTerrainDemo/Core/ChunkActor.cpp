@@ -11,23 +11,21 @@ AChunkActor::AChunkActor()
 	FName Name = FName(String);
 	ProceduralMesh = CreateDefaultSubobject<UProceduralMeshComponent>(Name);
 	ProceduralMesh->RegisterComponent();
-	SetRootComponent(ProceduralMesh);
 }
 
 void AChunkActor::InitChunkActor(float X, float Y)
 {
-	FString String = "ChunkActor_" + FString::FromInt(X) + "_" + FString::FromInt(Y);
-	FName Name = FName(String);
-	ProceduralMesh = CreateDefaultSubobject<UProceduralMeshComponent>(Name);
-	ProceduralMesh->RegisterComponent();
-	SetRootComponent(ProceduralMesh);
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, String);
+	const FString NewString = "ChunkActor_" + FString::FromInt(X) + "_" + FString::FromInt(Y);
+	const TCHAR* NewName = *NewString;
+	ProceduralMesh->Rename(NewName);
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, NewString);
 }
 
 // Called when the game starts or when spawned
 void AChunkActor::BeginPlay()
 {
 	Super::BeginPlay();
+	SetRootComponent(ProceduralMesh);
 	
 }
 

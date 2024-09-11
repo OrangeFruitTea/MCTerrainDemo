@@ -20,6 +20,6 @@ public:
 	// chunk地形密度[-1.f, 1.f]
 	float BlockDensity[MaxBlockWidth][MaxBlockWidth][MaxBlockHeight];
 	// chunk Actor
-	AChunkActor* ChunkActor;
+	// AChunkActor* ChunkActor;
 	
 };

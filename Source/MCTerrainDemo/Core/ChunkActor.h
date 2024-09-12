@@ -8,10 +8,6 @@
 #include "MCTerrainDemo/Core/Chunk.h"
 #include "ChunkActor.generated.h"
 
-
-UENUM()
-enum class EDirection { Fwd, Right, Bwd, Left, Up, Down };
-
 UCLASS()
 class MCTERRAINDEMO_API AChunkActor : public AActor
 {

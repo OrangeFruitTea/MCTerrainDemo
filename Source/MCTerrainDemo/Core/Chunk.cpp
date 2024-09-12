@@ -5,8 +5,8 @@
 
 
 Chunk::Chunk(int32 X, int32 Y, FVector2d Position)
-	:BlockDensity{0},
-	Index{X, Y}
+	: Index{X, Y},
+	BlockDensity{0}
 {
 	ChunkPosition = Position;
 	// ChunkActor = nullptr;

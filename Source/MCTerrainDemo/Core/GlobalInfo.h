@@ -6,8 +6,6 @@
 #include "MCTerrainDemo/Tool/NoiseTool.h"
 #include "MCTerrainDemo/Core/Chunk.h"
 
-using BlockData = TPair<uint64, int32>;
-
 class MCTERRAINDEMO_API GlobalInfo
 {
 private:

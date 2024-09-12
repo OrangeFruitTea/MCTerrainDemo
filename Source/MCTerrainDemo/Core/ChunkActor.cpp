@@ -15,7 +15,7 @@ AChunkActor::AChunkActor()
 void AChunkActor::InitChunkActor(Chunk* Info)
 {
 	ChunkInfo = Info;
-	const FString NewString = "ChunkActor_" + FString::FromInt(Info->Index.Key) + "_" + FString::FromInt(Info->Index.Value);
+	const FString NewString = "ChunkActor_" + FString::FromInt(Info->Index.X) + "_" + FString::FromInt(Info->Index.Y);
 	const TCHAR* NewName = *NewString;
 	this->Rename(NewName);
 }
@@ -103,8 +103,8 @@ void AChunkActor::RenderMesh()
 		if (ChunkInfo->BlockDensity[x][y][z] > 0.7f)
 		{
 			auto Pos = FVector3d(
-				ChunkInfo->Index.Key+x, 
-				ChunkInfo->Index.Value+y,
+				ChunkInfo->Index.X+x, 
+				ChunkInfo->Index.Y+y,
 				z);
 			for (const auto Direction : {EDirection::Fwd,EDirection::Right,EDirection::Bwd,EDirection::Left,EDirection::Up,EDirection::Down})
 			{

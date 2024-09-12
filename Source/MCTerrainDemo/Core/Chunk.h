@@ -3,18 +3,23 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "MCTerrainDemo/Core/EnumClass.h"
 #include "MCTerrainDemo/Core/ChunkMeshData.h"
 
 constexpr size_t MaxBlockWidth = 16;
 constexpr size_t MaxBlockHeight = 16;
 
+using BlockData = TPair<uint64, EBlockTYpe>;
+
 class MCTERRAINDEMO_API Chunk
 {
+private:
+	TArray<BlockData> Blocks;
 public:
 	explicit Chunk(int32 X, int32 Y, FVector2d Position);
 	~Chunk();
 	// chunk索引
-	TPair<int32, int32> Index = {0, 0};
+	const FIntPoint Index = {0, 0};
 	// chunk位置
 	FVector2d ChunkPosition;
 	// chunk 网格数据

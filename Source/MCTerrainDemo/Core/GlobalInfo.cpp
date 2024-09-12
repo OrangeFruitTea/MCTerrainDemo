@@ -15,7 +15,6 @@ void GlobalInfo::AddBlock(const FVector& Pos, int32 BlockID)
 {
 	uint64 Index = NoiseTool::Index(Pos.X, Pos.Y, Pos.Z);
 	GlobalBlocks.Emplace(Index, BlockID);
-	Blocks2Display.Emplace(Index, BlockID);
 }
 
 void GlobalInfo::RemoveBlock(const FVector& Pos)

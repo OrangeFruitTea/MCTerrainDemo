@@ -184,51 +184,6 @@ float NoiseTool::PerlinNoise3d(const FVector3d& Position)
 			-1, 1);
 }
 
-float NoiseTool::Fbm(const FVector2d& XY, int Octave)
-{
-	int32 CrystalSize = 4;
-	float Res = 0.0f;
-	float Height = 0.5f;
-	FVector2d Vec = FVector2d(XY);
-	for (int i = 0; i < Octave; i++)
-	{
-		PreHandlePerlinNoise2d(Vec, CrystalSize);
-		Res += Height * PerlinNoise2d(Vec);
-		Vec *= 2.0f;
-		CrystalSize *= 4;
-		Height *= 0.5f;
-	}
-	return Res;
-}
-
-float NoiseTool::Fbm(float X, float Y, int Octave)
-{
-	return Fbm(FVector2d(X, Y), Octave);
-}
-
-float NoiseTool::Fbm(const FVector3d& XYZ, int Octave)
-{
-	int32 CrystalSize = 4;
-	float Res = 0.0f;
-	float Height = 0.5f;
-	FVector Vec = FVector(XYZ);
-	for (int i = 0; i < Octave; i++)
-	{
-		PreHandlePerlinNoise3d(Vec, CrystalSize);
-		Res += Height * PerlinNoise3d(Vec);
-		Vec *= 2.0f;
-		CrystalSize *= 4;
-		Height *= 0.5f;
-	}
-	return Res;
-}
-
-float NoiseTool::Fbm(float X, float Y, float Z, int Octave)
-{
-	return Fbm(FVector(X,Y,Z), Octave);
-}
-
-
 uint64 NoiseTool::Index(const int32 X,const int32 Y, const int32 Z)
 {
 	constexpr int32 Offset = 16384;

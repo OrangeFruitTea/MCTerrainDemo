@@ -17,7 +17,7 @@ class MCTERRAINDEMO_API AChunkActor : public AActor
 {
 	GENERATED_BODY()
 private:
-	int32 BlockSize = 100;
+	int32 BlockSize = 60;
 	int32 BlockSizeHalf = BlockSize/2;
 
 	int VertexCount = 0;
@@ -54,7 +54,6 @@ public:
 public:
 	AChunkActor();
 	void InitChunkActor(Chunk* Info);
-	void RenderBlocks();
 	void RenderMesh();
 private:
 	// 渲染区块方块

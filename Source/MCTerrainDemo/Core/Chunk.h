@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "MCTerrainDemo/Core/ChunkMeshData.h"
 
 constexpr size_t MaxBlockWidth = 16;
 constexpr size_t MaxBlockHeight = 16;
@@ -16,6 +17,8 @@ public:
 	TPair<int32, int32> Index = {0, 0};
 	// chunk位置
 	FVector2d ChunkPosition;
+	// chunk 网格数据
+	FChunkMeshData MeshData;
 	// chunk地形密度[-1.f, 1.f]
 	float BlockDensity[MaxBlockWidth][MaxBlockWidth][MaxBlockHeight];
 };

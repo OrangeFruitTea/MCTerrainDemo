@@ -15,12 +15,11 @@ const FVector bMask[] = {FVector(0,0,1),FVector(0,0,-1),FVector(0,1,0),FVector(0
 
 AChunkActor::AChunkActor()
 {
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
-	FString String = "ChunkActor_Test";
-	FName Name = FName(String);
-	ProceduralMesh = CreateDefaultSubobject<UProceduralMeshComponent>(Name);
-	ProceduralMesh->RegisterComponent();
+	ProceduralMesh = CreateDefaultSubobject<UProceduralMeshComponent>("Mesh");
+	ProceduralMesh->SetCastShadow(false);
+	SetRootComponent(ProceduralMesh);
 }
 
 void AChunkActor::InitChunkActor(Chunk* Info)
@@ -28,16 +27,13 @@ void AChunkActor::InitChunkActor(Chunk* Info)
 	ChunkInfo = Info;
 	const FString NewString = "ChunkActor_" + FString::FromInt(Info->Index.Key) + "_" + FString::FromInt(Info->Index.Value);
 	const TCHAR* NewName = *NewString;
-	ProceduralMesh->Rename(NewName);
-	ChunkInfo = Info;
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, NewString);
+	this->Rename(NewName);
 }
 
 // Called when the game starts or when spawned
 void AChunkActor::BeginPlay()
 {
 	Super::BeginPlay();
-	SetRootComponent(ProceduralMesh);
 	
 }
 
@@ -182,7 +178,7 @@ FVector AChunkActor::GetPositionInDirection(EDirection Direction, FVector Positi
 
 void AChunkActor::ApplyMesh() const
 {
-	ProceduralMesh->CreateMeshSection(0, VertexData, TriangleData, TArray<FVector>(), UVData, TArray<FColor>(), TArray<FProcMeshTangent>(), false);
+	ProceduralMesh->CreateMeshSection(0, VertexData, TriangleData, TArray<FVector>(), UVData, TArray<FColor>({ FColor(255, 255, 255, 1), FColor(255, 255, 255, 1), FColor(255, 255, 255, 1), FColor(255, 255, 255, 1)}), TArray<FProcMeshTangent>(), false);
 }
 
 void AChunkActor::RenderMesh()
@@ -191,10 +187,10 @@ void AChunkActor::RenderMesh()
 	for (int y = 0; y < MaxBlockWidth; y++)
 	for (int z = 0; z < MaxBlockHeight; z++)
 	{
-		if (ChunkInfo->BlockDensity[x][y][z] > 0.72f)
+		if (ChunkInfo->BlockDensity[x][y][z] > 0.7f)
 		{
 			const auto Position = FVector(x,y,z);
-			for (auto Direction : {EDirection::Fwd,EDirection::Right,EDirection::Bwd,EDirection::Left,EDirection::Up,EDirection::Down})
+			for (const auto Direction : {EDirection::Fwd,EDirection::Right,EDirection::Bwd,EDirection::Left,EDirection::Up,EDirection::Down})
 			{
 				CreateFace(Direction, Position*BlockSize);
 			}

@@ -29,7 +29,7 @@ void HeightGenerator::GenerateDensity(Chunk& Chunk)
 			FVector3d PF = FVector3d(static_cast<float>(i)/MaxBlockWidth/CrystalSize[T], static_cast<float>(j)/MaxBlockWidth/CrystalSize[T], static_cast<float>(k)/MaxBlockHeight/CrystalSize[T]);
 			Density += (NoiseTool::PerlinNoise3d(PF) * Weight[T]) * 10;
 		}
-		if (Density >= .7f)
+		if (Density >= .8f)
 		{
 			Chunk.AddBlock2Data(EBlockType::Stone,i,j,k);
 		}

@@ -102,10 +102,11 @@ void AChunkActor::RenderMesh()
 	{
 		if (ChunkInfo->GetBlock(x,y,z) == EBlockType::Stone)
 		{
-			auto Pos = FVector3d(
-				ChunkInfo->ChunkIndex.X+x, 
-				ChunkInfo->ChunkIndex.Y+y,
-				z);
+			// auto Pos = FVector3d(
+			// 	ChunkInfo->ChunkIndex.X+x, 
+			// 	ChunkInfo->ChunkIndex.Y+y,
+			// 	z);
+			auto Pos = ChunkInfo->GetBlockWorldPosition(x,y,z);
 			for (const auto Direction : {EDirection::Fwd,EDirection::Right,EDirection::Bwd,EDirection::Left,EDirection::Up,EDirection::Down})
 			{
 				CreateFace(Direction, Pos);

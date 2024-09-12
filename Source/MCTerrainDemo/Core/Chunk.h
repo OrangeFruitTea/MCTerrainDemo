@@ -18,9 +18,6 @@ private:
 	// uint64: 压缩后的block的相对坐标; 世界坐标使用GerBlockWorldPosition获取
 	TMap<uint64, EBlockType> Blocks;
 
-	FVector GetBlockWorldPosition(const int X, const int Y, const int Z) const;
-	FVector GetBlockWorldPosition(uint64 DataIndex) const;
-
 	// 压缩与解压block相对坐标
 	uint64 Index(const int32 X, const int32 Y, const int32 Z) const;
 	uint64 Index(const FIntVector& Vec) const;
@@ -28,6 +25,7 @@ private:
 public:
 	explicit Chunk(int32 X, int32 Y, FVector2d Position);
 	~Chunk();
+	
 	// chunk索引
 	const FIntPoint ChunkIndex = {0, 0};
 	// chunk的世界位置
@@ -37,6 +35,9 @@ public:
 
 	TMap<uint64, EBlockType>* GetBlockData();
 	EBlockType GetBlock(const int X, const int Y, const int Z);
+	
+	FVector GetBlockWorldPosition(const int X, const int Y, const int Z) const;
+	FVector GetBlockWorldPosition(uint64 DataIndex) const;
 	
 	// 向chunk数据中加入block, XYZ: 对应的数组下标
 	void AddBlock2Data(EBlockType BlockType, const int X, const int Y, const int Z);

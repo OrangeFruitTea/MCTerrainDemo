@@ -11,7 +11,7 @@ void AMCTerrainGenerationMode::UpdateChunks()
 	for (int i = 0; i < WorldRadius; i++)
 	for (int j = 0; j < WorldRadius; j++)
 	{
-		FVector2d ChunkPosition = FVector2d(WorldCenterLocation.X+i, WorldCenterLocation.Y+j);
+		FVector2d ChunkPosition = FVector2d(WorldCenterLocation.X+i*MaxBlockWidth, WorldCenterLocation.Y+j*MaxBlockWidth);
 		FVector3d PosInput = FVector3d(ChunkPosition.X, ChunkPosition.Y, 10);
 		uint64 Index = NoiseTool::Index(ChunkPosition.X, ChunkPosition.Y);
 		if (!Chunks.Contains(Index))

@@ -148,15 +148,21 @@ TArray<FVector> AChunkActor::GetFaceVertices(EDirection Direction, FVector Posit
 	TArray<FVector> Vertices;
 	for (int i = 0; i < 4; i++)
 	{
-		Vertices.Add(BlockVertexData[BlockTriangleData[i + static_cast<int32>(Direction) * 4]] * BlockSize * Position);
+		Vertices.Add(BlockVertexData[BlockTriangleData[i + static_cast<int32>(Direction) * 4]] * Position);
 	}
 	return Vertices;
 }
 
 void AChunkActor::CreateFace(EDirection Direction, FVector Position)
 {
-	VertexData.Append(GetFaceVertices(Direction, Position));
-	UVData.Append({FVector2d(1,1),FVector2d(1,0),FVector2d(0,0),FVector2d(0,1)});
+	const auto Color = FColor::MakeRandomColor();
+	const auto Normal = GetNormal(Direction);
+
+	ChunkInfo->MeshData.Vertices.Append(GetFaceVertices(Direction, Position));
+	ChunkInfo->MeshData.Triangles.Append({VertexCount+3, VertexCount+2,VertexCount+1,VertexCount});
+	ChunkInfo->MeshData.Normals.Append({Normal, Normal, Normal, Normal});
+	ChunkInfo->MeshData.Colors.Append({Color,Color,Color,Color});
+	ChunkInfo->MeshData.UV0.Append({FVector2d(1,1),FVector2d(1,0),FVector2d(0,0),FVector2d(0,1)});
 	VertexCount += 4;
 	
 }
@@ -176,9 +182,32 @@ FVector AChunkActor::GetPositionInDirection(EDirection Direction, FVector Positi
 	}
 }
 
+FVector AChunkActor::GetNormal(EDirection Direction) const
+{
+	switch (Direction)
+	{
+	case EDirection::Fwd: return FVector::ForwardVector;
+	case EDirection::Bwd: return FVector::BackwardVector;
+	case EDirection::Right: return FVector::RightVector;
+	case EDirection::Left: return FVector::LeftVector;
+	case EDirection::Up: return FVector::UpVector;
+	case EDirection::Down: return FVector::DownVector;
+	default: throw std::invalid_argument("Invalid direction");
+	}
+}
+
 void AChunkActor::ApplyMesh() const
 {
-	ProceduralMesh->CreateMeshSection(0, VertexData, TriangleData, TArray<FVector>(), UVData, TArray<FColor>({ FColor(255, 255, 255, 1), FColor(255, 255, 255, 1), FColor(255, 255, 255, 1), FColor(255, 255, 255, 1)}), TArray<FProcMeshTangent>(), false);
+	ProceduralMesh->ClearAllMeshSections();
+	ProceduralMesh->CreateMeshSection(
+		0,
+		ChunkInfo->MeshData.Vertices,
+		ChunkInfo->MeshData.Triangles,
+		ChunkInfo->MeshData.Normals,
+		ChunkInfo->MeshData.UV0,
+		ChunkInfo->MeshData.Colors,
+		TArray<FProcMeshTangent>(),
+		false);
 }
 
 void AChunkActor::RenderMesh()
@@ -189,10 +218,13 @@ void AChunkActor::RenderMesh()
 	{
 		if (ChunkInfo->BlockDensity[x][y][z] > 0.7f)
 		{
-			const auto Position = FVector(x,y,z);
+			auto Pos = FVector3d(
+				ChunkInfo->ChunkPosition.X*16+x, 
+				ChunkInfo->ChunkPosition.Y*16+y,
+				z);
 			for (const auto Direction : {EDirection::Fwd,EDirection::Right,EDirection::Bwd,EDirection::Left,EDirection::Up,EDirection::Down})
 			{
-				CreateFace(Direction, Position*BlockSize);
+				CreateFace(Direction, Pos);
 			}
 		}
 	}

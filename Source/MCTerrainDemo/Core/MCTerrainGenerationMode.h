@@ -9,7 +9,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "MCTerrainGenerationMode.generated.h"
 
-const int32 WorldRadius = 3;
+const int32 WorldRadius = 1;
 
 UCLASS()
 class MCTERRAINDEMO_API AMCTerrainGenerationMode : public AGameModeBase

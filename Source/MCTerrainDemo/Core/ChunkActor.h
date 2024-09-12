@@ -28,12 +28,12 @@ private:
 
 	const FVector BlockVertexData[8] = {
 		FVector(BlockSize, BlockSize, BlockSize),
-		FVector(BlockSize, BlockSize, 0),
 		FVector(BlockSize, 0, BlockSize),
+		FVector(BlockSize, 0, 0),
+		FVector(BlockSize, BlockSize, 0),
+		FVector(0, 0, BlockSize),
 		FVector(0, BlockSize, BlockSize),
 		FVector(0, BlockSize, 0),
-		FVector(BlockSize, 0, 0),
-		FVector(0, 0, BlockSize),
 		FVector(0, 0, 0),
 	};
 
@@ -59,8 +59,9 @@ public:
 private:
 	// 渲染区块方块
 	TArray<FVector> GetFaceVertices(EDirection Direction, FVector Position) const;
-	void CreateFace(EDirection Direction, FVector Position);
 	FVector GetPositionInDirection(EDirection Direction, FVector Position) const;
+	FVector GetNormal(EDirection Direction) const;
+	void CreateFace(EDirection Direction, FVector Position);
 	void ApplyMesh() const;
 
 protected:

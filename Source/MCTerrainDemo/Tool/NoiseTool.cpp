@@ -235,6 +235,16 @@ uint64 NoiseTool::Index(const int32 X,const int32 Y, const int32 Z)
 	return (static_cast<uint64>(X+Offset)<<40 | static_cast<uint64>(Y+Offset)<<20 | static_cast<uint64>(Z+Offset));
 }
 
+uint64 NoiseTool::Index(const FVector& Vec)
+{
+	return Index(Vec.X, Vec.Y, Vec.Z);
+}
+
+uint64 NoiseTool::Index(const FVector2d& Vec)
+{
+	return Index(Vec.X, Vec.Y);
+}
+
 FVector NoiseTool::UnIndex(uint64 Index)
 {
 	const int32 Offset = 16384;

@@ -9,7 +9,7 @@ UENUM()
 enum EDirection { Fwd, Right, Bwd, Left, Up, Down };
 
 UENUM()
-enum EBlockTYpe
+enum EBlockType
 {
 	Air,
 	Stone

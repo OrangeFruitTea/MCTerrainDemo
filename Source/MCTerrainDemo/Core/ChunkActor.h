@@ -13,8 +13,6 @@ class MCTERRAINDEMO_API AChunkActor : public AActor
 {
 	GENERATED_BODY()
 private:
-	int32 BlockSize = 60;
-	int32 BlockSizeHalf = BlockSize/2;
 
 	int VertexCount = 0;
 

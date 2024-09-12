@@ -60,6 +60,8 @@ public:
 	static float Fbm(float X, float Y, float Z, int Octave);
 	// 将三维坐标压缩为一维uint64整数
 	static uint64 Index(const int32 X, const int32 Y, const int32 Z=0);
+	static uint64 Index(const FVector& Vec);
+	static uint64 Index(const FVector2d& Vec);
 	// 将一维uint64整数解压为三维坐标
 	static FVector UnIndex(uint64 Index);
 	NoiseTool() = delete;

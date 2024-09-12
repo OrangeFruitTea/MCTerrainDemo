@@ -2,8 +2,6 @@
 
 #pragma once
 
-#include "MCTerrainDemo/Generator/HeightGenerator.h"
-#include "MCTerrainDemo/Core/GlobalInfo.h"
 #include "MCTerrainDemo/Core/ChunkActor.h"
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
@@ -18,8 +16,6 @@ class MCTERRAINDEMO_API AMCTerrainGenerationMode : public AGameModeBase
 protected:
 	// 世界中心位置
 	FVector2d WorldCenterLocation = FVector2d(0, 0);
-	// 世界数据信息
-	GlobalInfo Info;
 	// world中的所有chunk
 	TMap<uint64,Chunk> Chunks;
 	// 用于显示的chunk
@@ -30,10 +26,6 @@ protected:
 	void UpdateChunks();
 	// 加载输入chunk的数据信息 (密度等)
 	static void LoadChunk(Chunk& Chunk);
-	// 根据chunk的数据信息显示chunk中的方块
-	void DisplayChunk(const Chunk& Chunk);
-	// 生成单个方块
-	void TestCreateBlock(const FVector3d& Pos, int32 BlockID) const;
 public:
 	UFUNCTION(BlueprintCallable, Category="TestFunc")
 	void TestGenerateWorld();

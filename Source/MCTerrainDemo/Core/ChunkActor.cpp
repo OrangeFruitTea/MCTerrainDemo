@@ -15,7 +15,7 @@ AChunkActor::AChunkActor()
 void AChunkActor::InitChunkActor(Chunk* Info)
 {
 	ChunkInfo = Info;
-	const FString NewString = "ChunkActor_" + FString::FromInt(Info->Index.X) + "_" + FString::FromInt(Info->Index.Y);
+	const FString NewString = "ChunkActor_" + FString::FromInt(Info->ChunkIndex.X) + "_" + FString::FromInt(Info->ChunkIndex.Y);
 	const TCHAR* NewName = *NewString;
 	this->Rename(NewName);
 }
@@ -100,11 +100,11 @@ void AChunkActor::RenderMesh()
 	for (int y = 0; y < MaxBlockWidth; y++)
 	for (int z = 0; z < MaxBlockHeight; z++)
 	{
-		if (ChunkInfo->BlockDensity[x][y][z] > 0.7f)
+		if (ChunkInfo->GetBlock(x,y,z) == EBlockType::Stone)
 		{
 			auto Pos = FVector3d(
-				ChunkInfo->Index.X+x, 
-				ChunkInfo->Index.Y+y,
+				ChunkInfo->ChunkIndex.X+x, 
+				ChunkInfo->ChunkIndex.Y+y,
 				z);
 			for (const auto Direction : {EDirection::Fwd,EDirection::Right,EDirection::Bwd,EDirection::Left,EDirection::Up,EDirection::Down})
 			{

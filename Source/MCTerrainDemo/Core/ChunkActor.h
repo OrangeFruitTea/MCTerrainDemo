@@ -48,6 +48,7 @@ public:
 public:
 	AChunkActor();
 	void InitChunkActor(Chunk* Info);
+	// 渲染chunk actor中的方块
 	void RenderMesh();
 private:
 	// 渲染区块方块
@@ -57,9 +58,10 @@ private:
 	void CreateFace(EDirection Direction, FVector Position);
 	void ApplyMesh() const;
 
+	bool Check(FVector Pos);
+
 protected:
 	virtual void BeginPlay() override;
-	// 渲染chunk actor中的方块
 
 public:	
 	// Called every frame

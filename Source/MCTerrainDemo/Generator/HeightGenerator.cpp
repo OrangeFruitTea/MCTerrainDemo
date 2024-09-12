@@ -6,8 +6,6 @@
 
 void HeightGenerator::GenerateDensity(Chunk& Chunk)
 {
-	// 创建三维变量
-	FVector3d Pos = FVector3d(Chunk.ChunkWorldPosition.X, Chunk.ChunkWorldPosition.Y, 0);
 	// 噪声晶格大小
 	int32 CrystalSize[3] = {4,16,64};
 	// 噪声权重

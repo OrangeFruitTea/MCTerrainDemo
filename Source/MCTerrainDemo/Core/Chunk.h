@@ -9,7 +9,7 @@
 constexpr size_t MaxBlockWidth = 16;
 constexpr size_t MaxBlockHeight = 16;
 
-constexpr int32 BlockSize = 60;
+constexpr int32 BlockSize = 50;
 constexpr int32 BlockSizeHalf = BlockSize/2;
 
 class MCTERRAINDEMO_API Chunk

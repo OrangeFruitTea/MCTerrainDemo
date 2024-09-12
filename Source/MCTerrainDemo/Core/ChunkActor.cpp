@@ -3,6 +3,8 @@
 
 #include "ChunkActor.h"
 
+#include "MCTerrainDemo/Block.h"
+
 AChunkActor::AChunkActor()
 {
 	PrimaryActorTick.bCanEverTick = false;
@@ -15,7 +17,7 @@ AChunkActor::AChunkActor()
 void AChunkActor::InitChunkActor(Chunk* Info)
 {
 	ChunkInfo = Info;
-	const FString NewString = "ChunkActor_" + FString::FromInt(Info->ChunkIndex.X) + "_" + FString::FromInt(Info->ChunkIndex.Y);
+	const FString NewString = "ChunkActor_" + FString::FromInt(Info->ChunkIndex.X) + FString::FromInt(Info->ChunkIndex.Y);
 	const TCHAR* NewName = *NewString;
 	this->Rename(NewName);
 }
@@ -24,7 +26,6 @@ void AChunkActor::InitChunkActor(Chunk* Info)
 void AChunkActor::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 TArray<FVector> AChunkActor::GetFaceVertices(EDirection Direction, FVector Position) const
@@ -32,7 +33,7 @@ TArray<FVector> AChunkActor::GetFaceVertices(EDirection Direction, FVector Posit
 	TArray<FVector> Vertices;
 	for (int i = 0; i < 4; i++)
 	{
-		Vertices.Add(BlockVertexData[BlockTriangleData[i + static_cast<int32>(Direction) * 4]] * Position);
+		Vertices.Add(BlockVertexData[BlockTriangleData[i + static_cast<int32>(Direction) * 4]] + Position);
 	}
 	return Vertices;
 }
@@ -94,23 +95,34 @@ void AChunkActor::ApplyMesh() const
 		false);
 }
 
+bool AChunkActor::Check(FVector Pos)
+{
+	if (Pos.X >= MaxBlockWidth || Pos.Y >= MaxBlockWidth || Pos.X < 0 || Pos.Y < 0 || Pos.Z < 0) return true;
+	if (Pos.Z >= MaxBlockHeight) return true;
+	return ChunkInfo->GetBlock(Pos.X, Pos.Y, Pos.Z) == EBlockType::Air;
+}
+
 void AChunkActor::RenderMesh()
 {
 	for (int x = 0; x < MaxBlockWidth; x++)
 	for (int y = 0; y < MaxBlockWidth; y++)
 	for (int z = 0; z < MaxBlockHeight; z++)
 	{
-		if (ChunkInfo->GetBlock(x,y,z) == EBlockType::Stone)
+		if (ChunkInfo->GetBlock(x,y,z) != EBlockType::Air)
 		{
 			// auto Pos = FVector3d(
 			// 	ChunkInfo->ChunkIndex.X+x, 
 			// 	ChunkInfo->ChunkIndex.Y+y,
 			// 	z);
 			auto Pos = ChunkInfo->GetBlockWorldPosition(x,y,z);
+			// auto Pos = FVector(x,y,z);
 			for (const auto Direction : {EDirection::Fwd,EDirection::Right,EDirection::Bwd,EDirection::Left,EDirection::Up,EDirection::Down})
 			{
+				if (Check(GetPositionInDirection(Direction, Pos)))
 				CreateFace(Direction, Pos);
 			}
+			// GEngine->AddOnScreenDebugMessage(-1, 115.f, FColor::Red, FString::Printf(TEXT("Block Position: (%f, %f, %f)"), Pos.X, Pos.Y, Pos.Z));
+			// GetWorld()->SpawnActor<ABlock>(Pos * 1.75, FRotator::ZeroRotator);
 		}
 	}
 	ApplyMesh();

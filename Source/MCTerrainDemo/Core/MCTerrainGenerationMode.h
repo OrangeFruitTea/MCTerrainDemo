@@ -7,7 +7,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "MCTerrainGenerationMode.generated.h"
 
-const int32 WorldRadius = 4;
+const int32 DrawDistance = 5;
 
 UCLASS()
 class MCTERRAINDEMO_API AMCTerrainGenerationMode : public AGameModeBase
@@ -21,7 +21,7 @@ protected:
 	// 用于显示的chunk
 	TSet<Chunk*> Chunks2Display;
 	// 用于显示的chunk actor
-	TArray<TWeakObjectPtr<AChunkActor>> ChunkActors2Display;
+	TArray<TWeakObjectPtr<AActor>> ChunkActors2Display;
 	// 更新chunk
 	void UpdateChunks();
 	// 加载输入chunk的数据信息 (密度等)

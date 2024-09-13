@@ -51,7 +51,7 @@ void HeightGenerator::GenerateHeight(Chunk& Chunk)
 	{
 		const auto NoiseValue = NoiseLite->GetNoise(x+Chunk.ChunkWorldPosition.X, y+Chunk.ChunkWorldPosition.Y);
  		// GEngine->AddOnScreenDebugMessage(-1, 115.f, FColor::Red, FString::Printf(TEXT("Block Height: (%f)"), NoiseValue));
-		if (NoiseValue >= 0)
+		// if (NoiseValue >= -0.6f)
 		{
 			Chunk.AddBlock2Data(EBlockType::Stone, x,y,NoiseValue*10);
 		}

@@ -7,10 +7,10 @@
 
 void AMCTerrainGenerationMode::UpdateChunks()
 {
-	for (int i = 0; i < WorldRadius; i++)
-	for (int j = 0; j < WorldRadius; j++)
+	for (int i = -DrawDistance; i <= DrawDistance; i++)
+	for (int j = -DrawDistance; j <= DrawDistance; j++)
 	{
-		FVector PosInput = FVector(WorldCenterLocation.X+i*MaxBlockWidth, WorldCenterLocation.Y+j*MaxBlockWidth, 1.25f);
+		FVector PosInput = FVector(MaxBlockWidth*(i)+(WorldCenterLocation.X), MaxBlockWidth*(j)+(WorldCenterLocation.Y), 0.0f);
 		uint64 Index = NoiseTool::Index(PosInput.X, PosInput.Y);
 		if (!Chunks.Contains(Index))
 		{
@@ -18,9 +18,9 @@ void AMCTerrainGenerationMode::UpdateChunks()
 			Chunk& NewChunk = Chunks[Index];
 			// HeightGenerator::GenerateDensity(NewChunk);
 			HeightGenerator::GenerateHeight(NewChunk);
-			AChunkActor* NewChunkActor = GetWorld()->SpawnActor<AChunkActor>(AChunkActor::StaticClass());
+			AChunkActor* NewChunkActor = GetWorld()->SpawnActor<AChunkActor>(AChunkActor::StaticClass(), PosInput, FRotator::ZeroRotator);
 			NewChunkActor->InitChunkActor(&NewChunk);
-			NewChunkActor->SetActorLocation(PosInput);
+			// NewChunkActor->SetActorLocationAndRotation(PosInput, FRotator::ZeroRotator);
 			// GEngine->AddOnScreenDebugMessage(-1, 115.f, FColor::Green, FString::Printf(TEXT("Chunk Position: (%f, %f)"), Pos.X, Pos.Y));
 			ChunkActors2Display.Emplace(NewChunkActor);
 			NewChunkActor->RenderMesh();

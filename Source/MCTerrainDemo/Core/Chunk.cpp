@@ -26,8 +26,8 @@ FVector Chunk::GetBlockWorldPosition(const int X, const int Y, const int Z) cons
 {
 	// 计算方块在世界中的位置
 	return FVector (
-		ChunkIndex.X * BlockSize * 16 + X * BlockSize,
-		ChunkIndex.Y * BlockSize * 16 + Y * BlockSize,
+		ChunkIndex.X * BlockSize * MaxBlockWidth + X * BlockSize,
+		ChunkIndex.Y * BlockSize * MaxBlockWidth + Y * BlockSize,
 		Z * BlockSize
 	);
 }

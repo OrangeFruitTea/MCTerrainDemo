@@ -7,8 +7,8 @@
 
 void AMCTerrainGenerationMode::UpdateChunks()
 {
-	for (int i = 0; i < WorldRadius-3; i++)
-	for (int j = 0; j < WorldRadius+5; j++)
+	for (int i = 0; i < WorldRadius; i++)
+	for (int j = 0; j < WorldRadius; j++)
 	{
 		FVector2d ChunkPosition = FVector2d(WorldCenterLocation.X+i*MaxBlockWidth, WorldCenterLocation.Y+j*MaxBlockWidth);
 		FVector3d PosInput = FVector3d(ChunkPosition.X, ChunkPosition.Y, 10);

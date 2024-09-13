@@ -27,12 +27,33 @@ float NoiseTool::Grad(const FVector2d& Position2d, const FVector2d& Vertex)
 	return FVector2d::DotProduct(Position2d, Vertex);
 }
 
+float NoiseTool::GradWithSeed(int Seed, int XPrimed, int YPrimed, float Xd, float Yd)
+{
+	int Hash = Hash21WithSeed(Seed, XPrimed, YPrimed);
+	Hash ^= Hash >> 15;
+	Hash &= 127 << 1;
+	float Xg = Gradients2D[Hash];
+	float Yg = Gradients2D[Hash|1];
+	return Xd * Xg + Yd * Yg;
+}
+
 float NoiseTool::Grad3d(float X, float Y, float Z, int Hash)
 {
 	int h = Hash & 15;
 	int u = h < 8 ? X : Y;
 	int v = h < 4 ? Y : (h == 12 || h == 14 ? X : Z);
 	return ((h & 1) == 0 ? u : -u) + ((h & 2) == 0 ? v : -v);
+}
+
+float NoiseTool::Grad3dWithSeed(int Seed, int XPrimed, int YPrimed, int ZPrimed, float Xd, float Yd, float Zd)
+{
+	int Hash = Hash31WithSeed(Seed, XPrimed, YPrimed, ZPrimed);
+	Hash ^= Hash >> 15;
+	Hash &= 63 << 2;
+	float Xg = Gradients3D[Hash];
+	float Yg = Gradients3D[Hash|1];
+	float Zg = Gradients3D[Hash|2];
+	return Xd * Xg + Yd * Yg + Zd * Zg;
 }
 
 float NoiseTool::Grad3d(const FVector3d& Position3d, const FVector3d& Vertex)
@@ -61,9 +82,23 @@ int32 NoiseTool::Hash21(const FVector2d& Vector)
 	return (0x9E3779B9* static_cast<int32>(Vector.X) + static_cast<int32>(Vector.Y)) % 1024;
 }
 
+int32 NoiseTool::Hash21WithSeed(int Seed, int X, int Y)
+{
+	int32 Hash = Seed ^ X ^ Y;
+	Hash *= 0x27d4eb2d;
+	return Hash;
+}
+
 int32 NoiseTool::Hash31(const FVector3d& Vector)
 {
 	return (0x9E3779B9* static_cast<int32>(Vector.X) + 0x6C078965* static_cast<int32>(Vector.Y) + static_cast<int32>(Vector.Z)) % 1024;
+}
+
+int32 NoiseTool::Hash31WithSeed(int Seed, int X, int Y, int Z)
+{
+	int32 Hash = Seed ^ X ^ Y ^ Z;
+	Hash *= 0x27d4eb2d;
+	return Hash;
 }
 
 float NoiseTool::Fade(const float T)
@@ -182,6 +217,77 @@ float NoiseTool::PerlinNoise3d(const FVector3d& Position)
 				Fade(Pos.Y)),
 			Fade(Pos.Z)),
 			-1, 1);
+}
+
+float NoiseTool::SinglePerlin(int Seed, float X, float Y)
+{
+	int X0 = FMath::Floor(X);
+	int Y0 = FMath::Floor(Y);
+
+	float Xd0 = (float)(X - X0);
+	float Yd0 = (float)(Y - Y0);
+	float Xd1 = Xd0 - 1;
+	float Yd1 = Yd0 - 1;
+
+	float Xs = Fade(Xd0);
+	float Ys = Fade(Yd0);
+
+	X0 *= PrimeX;
+	Y0 *= PrimeY;
+	int X1 = X0 + PrimeX;
+	int Y1 = Y0 + PrimeY;
+
+	float Xf0 = FMath::Lerp(GradWithSeed(Seed, X0, Y0, Xd0, Yd0), GradWithSeed(Seed, X1, Y0, Xd1, Yd0), Xs);
+	float Xf1 = FMath::Lerp(GradWithSeed(Seed, X0, Y1, Xd0, Yd1), GradWithSeed(Seed, X1, Y1, Xd1, Yd1), Xs);
+
+	return FMath::Lerp(Xf0, Xf1, Ys) * 1.4247691104677813f;
+}
+
+float NoiseTool::SinglePerlin(int Seed, const FVector2d& Vec)
+{
+	return SinglePerlin(Seed, Vec.X, Vec.Y);
+}
+
+float NoiseTool::SinglePerlin(int Seed, float X, float Y, float Z)
+{
+	// GEngine->AddOnScreenDebugMessage(-1, 115.f, FColor::Red, FString::Printf(TEXT("x0 y0 z0: (%f, %f, %f)"), X, Y, Z));
+	int x0 = FMath::Floor(X);
+	int y0 = FMath::Floor(Y);
+	int z0 = FMath::Floor(Z);
+	
+
+	float xd0 = (float)(X - x0);
+	float yd0 = (float)(Y - y0);
+	float zd0 = (float)(Z - z0);
+	float xd1 = xd0 - 1;
+	float yd1 = yd0 - 1;
+	float zd1 = zd0 - 1;
+	// 缓动函数
+	float xs = Fade(xd0);
+	float ys = Fade(yd0);
+	float zs = Fade(zd0);
+
+	x0 *= PrimeX;
+	y0 *= PrimeY;
+	z0 *= PrimeZ;
+	int x1 = x0 + PrimeX;
+	int y1 = y0 + PrimeY;
+	int z1 = z0 + PrimeZ;
+
+	float xf00 = FMath::Lerp(Grad3dWithSeed(Seed, x0, y0, z0, xd0, yd0, zd0), Grad3dWithSeed(Seed, x1, y0, z0, xd1, yd0, zd0), xs);
+	float xf10 = FMath::Lerp(Grad3dWithSeed(Seed, x0, y1, z0, xd0, yd1, zd0), Grad3dWithSeed(Seed, x1, y1, z0, xd1, yd1, zd0), xs);
+	float xf01 = FMath::Lerp(Grad3dWithSeed(Seed, x0, y0, z1, xd0, yd0, zd1), Grad3dWithSeed(Seed, x1, y0, z1, xd1, yd0, zd1), xs);
+	float xf11 = FMath::Lerp(Grad3dWithSeed(Seed, x0, y1, z1, xd0, yd1, zd1), Grad3dWithSeed(Seed, x1, y1, z1, xd1, yd1, zd1), xs);
+
+	float yf0 = FMath::Lerp(xf00, xf10, ys);
+	float yf1 = FMath::Lerp(xf01, xf11, ys);
+
+	return FMath::Lerp(yf0, yf1, zs) * 0.964921414852142333984375f;
+}
+
+float NoiseTool::SinglePerlin(int Seed, const FVector& Vec)
+{
+	return SinglePerlin(Seed, Vec.X, Vec.Y, Vec.Z);
 }
 
 uint64 NoiseTool::Index(const int32 X,const int32 Y, const int32 Z)

@@ -58,7 +58,7 @@ FIntVector Chunk::UnIndex(const uint64 Index) const
 		int32(Index&0xFFFFF)-Offset);
 }
 
-Chunk::Chunk(int32 X, int32 Y, FVector2d Position)
+Chunk::Chunk(int32 X, int32 Y, FVector Position)
 	: Blocks{},
 	ChunkIndex{X, Y},
 	BlockDensity{0}

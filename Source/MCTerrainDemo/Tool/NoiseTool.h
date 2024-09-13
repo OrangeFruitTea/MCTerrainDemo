@@ -123,6 +123,7 @@ public:
 	static float SinglePerlin(int Seed, const FVector2d& Vec);
 	static float SinglePerlin(int Seed, float X, float Y, float Z);
 	static float SinglePerlin(int Seed, const FVector& Vec);
+
 	// 将三维坐标压缩为一维uint64整数
 	static uint64 Index(const int32 X, const int32 Y, const int32 Z=0);
 	static uint64 Index(const FVector& Vec);

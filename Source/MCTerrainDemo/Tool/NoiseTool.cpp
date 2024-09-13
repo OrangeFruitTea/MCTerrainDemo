@@ -178,7 +178,7 @@ void NoiseTool::PreHandlePerlinNoise3d(float X, float Y, float Z, const int32 Cr
 		CrystalVertex3d[i] = GGradientVector3d[Index];
 		// GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Crystal Vertex: (%f, %f, %f)"), CrystalVertex3d[i].X, CrystalVertex3d[i].Y, CrystalVertex3d[i].Z));
 	}
-	GlobalOffset3d = (FVector(X,Y,Z)-Pi*CrystalSize)/ CrystalSize;
+	GlobalOffset3d = (FVector(X,Y,Z)-Pi*CrystalSize) / CrystalSize;
 }
 
 void NoiseTool::PreHandlePerlinNoise3d(const FVector3d& Position3d, const int32 CrystalSize)
@@ -289,6 +289,39 @@ float NoiseTool::SinglePerlin(int Seed, const FVector& Vec)
 {
 	return SinglePerlin(Seed, Vec.X, Vec.Y, Vec.Z);
 }
+
+// float NoiseTool::FBm(int Seed, int Octave, float X, float Y)
+// {
+// 	int mSeed = Seed;
+// 	float Res = 0;
+// 	float amp = 1/1.75f;
+// 	for (int i = 0; i < Octave; i++)
+// 	{
+// 		float noise = SinglePerlin(Seed++, X, Y);
+// 		Res += noise * amp;
+// 		X *= 2;
+// 		Y *= 2;
+// 		amp *= 0.5f;
+// 	}
+// 	return Res;
+// }
+//
+// float NoiseTool::FBm(int Seed, int Octave, float X, float Y, float Z)
+// {
+// 	int mSeed = Seed;
+// 	float Res = 0;
+// 	float amp = 1/1.75f;
+// 	for (int i = 0; i < Octave; i++)
+// 	{
+// 		float noise = SinglePerlin(Seed++, X, Y, Z);
+// 		Res += noise * amp;
+// 		X *= 2;
+// 		Y *= 2;
+// 		Z *= 2;
+// 		amp *= 0.5f;
+// 	}
+// 	return Res;
+// }
 
 uint64 NoiseTool::Index(const int32 X,const int32 Y, const int32 Z)
 {

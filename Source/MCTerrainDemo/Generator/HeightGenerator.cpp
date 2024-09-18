@@ -33,7 +33,7 @@ void HeightGenerator::GenerateDensity(Chunk& Chunk)
 		// }
 		for (int T = 0; T < 3; T++)
 		{
-			Density += Weight[T] * NoiseTool::SinglePerlin(Seed++, (Chunk.ChunkWorldPosition.X/100+i), (Chunk.ChunkWorldPosition.Y/100+j), (1.75f/2.f+k));
+			// Density += Weight[T] * NoiseLite->SinglePerlin(Seed++, (Chunk.ChunkWorldPosition.X/100+i), (Chunk.ChunkWorldPosition.Y/100+j), (1.75f/2.f+k));
 		}
 		// Density = FMath::Clamp(Density, -1, 1);
 		// GEngine->AddOnScreenDebugMessage(-1, 115.f, FColor::Red, FString::Printf(TEXT("Block Density: (%f)"), Density));
@@ -50,10 +50,14 @@ void HeightGenerator::GenerateHeight(Chunk& Chunk)
 	for (int y = 0; y < MaxBlockWidth; y++)
 	{
 		const auto NoiseValue = NoiseLite->GetNoise(x+Chunk.ChunkWorldPosition.X, y+Chunk.ChunkWorldPosition.Y);
- 		// GEngine->AddOnScreenDebugMessage(-1, 115.f, FColor::Red, FString::Printf(TEXT("Block Height: (%f)"), NoiseValue));
+ 		// GEngine->AddOnScreenDebugMessage(-1, 115.f, FColor::Red, FString::Printf(TEXT("Block Height: (%f)"), NoiseValue*10));
 		// if (NoiseValue >= -0.6f)
 		{
-			Chunk.AddBlock2Data(EBlockType::Stone, x,y,NoiseValue*10);
+			// Chunk.AddBlock2Data(EBlockType::Stone, x,y,NoiseValue*10);
+			for (int i = 0; i < NoiseValue*MaxBlockHeight+5; i++)
+			{
+				Chunk.AddBlock2Data(EBlockType::Stone, x,y,i);
+			}
 		}
 		
 	}

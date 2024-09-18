@@ -15,7 +15,7 @@ class MCTERRAINDEMO_API AMCTerrainGenerationMode : public AGameModeBase
 	GENERATED_BODY()
 protected:
 	// 世界中心位置
-	FVector2d WorldCenterLocation = FVector2d(0, 0);
+	FVector WorldCenterLocation = FVector(0, 0, 0);
 	// world中的所有chunk
 	TMap<uint64,Chunk> Chunks;
 	// 用于显示的chunk
@@ -25,7 +25,9 @@ protected:
 	// 更新chunk
 	void UpdateChunks();
 	// 加载输入chunk的数据信息 (密度等)
-	static void LoadChunk(Chunk& Chunk);
+	Chunk* LoadChunk(int x, int y, const FVector& PosInput);
+	// 生成chunk actor
+	void SpawnChunkActor(Chunk& Chunk);
 public:
 	UFUNCTION(BlueprintCallable, Category="TestFunc")
 	void TestGenerateWorld();

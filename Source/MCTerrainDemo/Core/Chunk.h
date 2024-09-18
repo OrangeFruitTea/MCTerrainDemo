@@ -7,7 +7,7 @@
 #include "MCTerrainDemo/Core/ChunkMeshData.h"
 
 constexpr size_t MaxBlockWidth = 16;
-constexpr size_t MaxBlockHeight = 16;
+constexpr size_t MaxBlockHeight = 32;
 
 constexpr int32 BlockSize = 50;
 constexpr int32 BlockSizeHalf = BlockSize/2;

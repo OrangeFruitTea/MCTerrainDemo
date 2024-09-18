@@ -3,8 +3,6 @@
 
 #include "ChunkActor.h"
 
-#include "MCTerrainDemo/Block.h"
-
 AChunkActor::AChunkActor()
 {
 	PrimaryActorTick.bCanEverTick = false;

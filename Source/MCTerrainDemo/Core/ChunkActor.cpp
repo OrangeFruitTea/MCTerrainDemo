@@ -114,8 +114,8 @@ void AChunkActor::RenderMeshGreedy()
 					const auto CurrentBlock = ChunkInfo->GetBlock(ChunkItr);
 					const auto CompareBlock = ChunkInfo->GetBlock(ChunkItr + AxisMask);
 
-					const bool CurrentBlockOpaque = CurrentBlock != EBlockType::Air;
-					const bool CompareBlockOpaque = CompareBlock != EBlockType::Air;
+					const bool CurrentBlockOpaque = (CurrentBlock != EBlockType::Air && CurrentBlock != EBlockType::Null);
+					const bool CompareBlockOpaque = (CompareBlock != EBlockType::Air && CurrentBlock != EBlockType::Null);
 					if (CurrentBlockOpaque == CompareBlockOpaque)
 					{
 						Mask[N++] = FMask{EBlockType::Null, 0};
@@ -195,10 +195,10 @@ void AChunkActor::CreateQuad(FMask Mask, FIntVector AxisMask, int Width, int Hei
 	const auto Color = FColor(0, 0, 0);
 
 	ChunkInfo->MeshData.Vertices.Append({
-		FVector(V1)*100 + ChunkInfo->ChunkWorldPosition,
-		FVector(V2)*100 + ChunkInfo->ChunkWorldPosition,
-		FVector(V3)*100 + ChunkInfo->ChunkWorldPosition,
-		FVector(V4)*100 + ChunkInfo->ChunkWorldPosition
+		FVector(V1)*100 + ChunkInfo->ChunkWorldPosition*99,
+		FVector(V2)*100 + ChunkInfo->ChunkWorldPosition*99,
+		FVector(V3)*100 + ChunkInfo->ChunkWorldPosition*99,
+		FVector(V4)*100 + ChunkInfo->ChunkWorldPosition*99
 	});
 	ChunkInfo->MeshData.Triangles.Append({
 		VertexCount,

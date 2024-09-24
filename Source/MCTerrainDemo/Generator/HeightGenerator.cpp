@@ -2,7 +2,6 @@
 
 
 #include "HeightGenerator.h"
-#include "MCTerrainDemo/Tool/NoiseTool.h"
 
 void HeightGenerator::GenerateDensity(Chunk& Chunk)
 {

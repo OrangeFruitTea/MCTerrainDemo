@@ -34,6 +34,7 @@ public:
 	FChunkMeshData MeshData;
 
 	TMap<uint64, EBlockType>* GetBlockData();
+	EBlockType GetBlock(const FIntVector& Vec);
 	EBlockType GetBlock(const int X, const int Y, const int Z);
 	
 	FVector GetBlockWorldPosition(const int X, const int Y, const int Z) const;

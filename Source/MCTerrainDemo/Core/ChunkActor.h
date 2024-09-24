@@ -50,12 +50,19 @@ public:
 	void InitChunkActor(Chunk* Info);
 	// 渲染chunk actor中的方块
 	void RenderMesh();
+	void RenderMeshGreedy();
 private:
 	// 渲染区块方块
 	TArray<FVector> GetFaceVertices(EDirection Direction, FVector Position) const;
 	FVector GetPositionInDirection(EDirection Direction, FVector Position) const;
 	FVector GetNormal(EDirection Direction) const;
 	void CreateFace(EDirection Direction, FVector Position);
+
+	struct FMask {EBlockType Block; int Normal; };
+	// Greedy Render渲染方法
+	void CreateQuad(FMask Mask, FIntVector AxisMask, int Width, int Height, FIntVector V1, FIntVector V2, FIntVector V3, FIntVector V4);
+	bool CompareMask(FMask F1, FMask F2);
+	
 	void ApplyMesh() const;
 
 	bool Check(FVector Pos);

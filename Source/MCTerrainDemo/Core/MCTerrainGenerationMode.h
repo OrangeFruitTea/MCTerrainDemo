@@ -7,7 +7,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "MCTerrainGenerationMode.generated.h"
 
-const int32 DrawDistance = 5;
+constexpr int32 DrawDistance = 1;
 
 UCLASS()
 class MCTERRAINDEMO_API AMCTerrainGenerationMode : public AGameModeBase

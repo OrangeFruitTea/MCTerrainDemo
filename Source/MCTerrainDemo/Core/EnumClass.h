@@ -11,6 +11,7 @@ enum EDirection { Fwd, Right, Bwd, Left, Up, Down };
 UENUM()
 enum EBlockType
 {
+	Null,
 	Air,
 	Stone
 };

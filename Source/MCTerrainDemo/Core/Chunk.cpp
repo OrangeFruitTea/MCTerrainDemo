@@ -8,6 +8,11 @@ TMap<uint64, EBlockType>* Chunk::GetBlockData()
 	return &Blocks;
 }
 
+EBlockType Chunk::GetBlock(const FIntVector& Vec)
+{
+	return GetBlock(Vec.X, Vec.Y, Vec.Z);
+}
+
 EBlockType Chunk::GetBlock(const int X, const int Y, const int Z)
 {
 	const uint64 DataIndex = Index(X,Y,Z);

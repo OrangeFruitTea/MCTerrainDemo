@@ -4,7 +4,6 @@
 #include "MCTerrainGenerationMode.h"
 #include "MCTerrainDemo/Generator/HeightGenerator.h"
 #include "MCTerrainDemo/Tool/IndexTool.h"
-#include "MCTerrainDemo/Tool/NoiseTool.h"
 
 void AMCTerrainGenerationMode::UpdateChunks()
 {
@@ -48,10 +47,11 @@ void AMCTerrainGenerationMode::SpawnChunkActor(Chunk& NewChunk)
 	{
 	NewChunkActor->InitChunkActor(&NewChunk);
 	NewChunkActor->FinishSpawning(NewTrans);
-	// NewChunkActor->SetActorLocationAndRotation(PosInput, FRotator::ZeroRotator);
+	// NewChunkActor->SetActorLocationAndRotation(NewChunk.ChunkWorldPosition, FRotator::ZeroRotator);
 	// GEngine->AddOnScreenDebugMessage(-1, 115.f, FColor::Green, FString::Printf(TEXT("Chunk Position: (%f, %f)"), Pos.X, Pos.Y));
 	ChunkActors2Display.Emplace(NewChunkActor);
-	NewChunkActor->RenderMesh();
+	// NewChunkActor->RenderMesh();
+	NewChunkActor->RenderMeshGreedy();
 	}
 }
 

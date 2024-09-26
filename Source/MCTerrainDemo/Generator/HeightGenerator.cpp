@@ -53,9 +53,14 @@ void HeightGenerator::GenerateHeight(Chunk& Chunk)
 		// if (NoiseValue >= -0.6f)
 		{
 			// Chunk.AddBlock2Data(EBlockType::Stone, x,y,NoiseValue*10);
-			for (int i = 0; i < NoiseValue*MaxBlockHeight+5; i++)
+			for (int i = 0; i < NoiseValue*MaxBlockHeight+3; i++)
 			{
-				Chunk.AddBlock2Data(EBlockType::Stone, x,y,i);
+				if (i < NoiseValue*MaxBlockHeight)
+					Chunk.AddBlock2Data(EBlockType::Stone, x,y,i);
+				else
+				{
+					Chunk.AddBlock2Data(EBlockType::Dirt, x,y,i);
+				}
 			}
 		}
 		

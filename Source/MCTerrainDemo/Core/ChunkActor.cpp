@@ -38,14 +38,14 @@ TArray<FVector> AChunkActor::GetFaceVertices(EDirection Direction, FVector Posit
 
 void AChunkActor::CreateFace(EDirection Direction, FVector Position)
 {
-	const auto Color = FColor::MakeRandomColor();
-	const auto Normal = GetNormal(Direction);
+	// const auto Color = FColor::MakeRandomColor();
+	// const auto Normal = GetNormal(Direction);
 
-	ChunkInfo->MeshData.Vertices.Append(GetFaceVertices(Direction, Position));
-	ChunkInfo->MeshData.Triangles.Append({VertexCount+3, VertexCount+2, VertexCount, VertexCount+2,VertexCount+1, VertexCount});
-	ChunkInfo->MeshData.Normals.Append({Normal, Normal, Normal, Normal});
-	ChunkInfo->MeshData.Colors.Append({Color,Color,Color,Color});
-	ChunkInfo->MeshData.UV0.Append({FVector2d(1,1),FVector2d(1,0),FVector2d(0,0),FVector2d(0,1)});
+	// ChunkInfo->Sections.Vertices.Append(GetFaceVertices(Direction, Position));
+	// ChunkInfo->Sections[0].Triangles.Append({VertexCount+3, VertexCount+2, VertexCount, VertexCount+2,VertexCount+1, VertexCount});
+	// ChunkInfo->Sections[0].Normals.Append({Normal, Normal, Normal, Normal});
+	// ChunkInfo->Sections[0].Colors.Append({Color,Color,Color,Color});
+	// ChunkInfo->Sections[0].UV0.Append({FVector2d(1,1),FVector2d(1,0),FVector2d(0,0),FVector2d(0,1)});
 	VertexCount += 4;
 	
 }
@@ -191,16 +191,22 @@ void AChunkActor::RenderMeshGreedy()
 void AChunkActor::CreateQuad(FMask Mask, FIntVector AxisMask, int Width, int Height, FIntVector V1, FIntVector V2,
                              FIntVector V3, FIntVector V4)
 {
+	EBlockType Index = Mask.Block;
 	const auto Normal = FVector(AxisMask * Mask.Normal);
 	const auto Color = FColor(0, 0, 0);
 
-	ChunkInfo->MeshData.Vertices.Append({
+	if (!ChunkInfo->Sections.Contains(Index))
+	{
+		ChunkInfo->Sections.Emplace(Index, FChunkMeshData());
+	}
+
+	ChunkInfo->Sections[Index].Vertices.Append({
 		FVector(V1)*100 + ChunkInfo->ChunkWorldPosition*99,
 		FVector(V2)*100 + ChunkInfo->ChunkWorldPosition*99,
 		FVector(V3)*100 + ChunkInfo->ChunkWorldPosition*99,
 		FVector(V4)*100 + ChunkInfo->ChunkWorldPosition*99
 	});
-	ChunkInfo->MeshData.Triangles.Append({
+	ChunkInfo->Sections[Index].Triangles.Append({
 		VertexCount,
 		VertexCount + 2 + Mask.Normal,
 		VertexCount + 2 - Mask.Normal,
@@ -208,13 +214,13 @@ void AChunkActor::CreateQuad(FMask Mask, FIntVector AxisMask, int Width, int Hei
 		VertexCount + 1 - Mask.Normal,
 		VertexCount + 1 + Mask.Normal
 	});
-	ChunkInfo->MeshData.Normals.Append({
+	ChunkInfo->Sections[Index].Normals.Append({
 		Normal,
 		Normal,
 		Normal,
 		Normal
 	});
-	ChunkInfo->MeshData.Colors.Append({
+	ChunkInfo->Sections[Index].Colors.Append({
 		Color,
 		Color,
 		Color,
@@ -222,20 +228,20 @@ void AChunkActor::CreateQuad(FMask Mask, FIntVector AxisMask, int Width, int Hei
 	});
 	if (Normal.X == 1 || Normal.X == -1)
 	{
-		ChunkInfo->MeshData.UV0.Append({
-			FVector2D(Width, Height),
-			FVector2D(0, Height),
-			FVector2D(Width, 0),
-			FVector2D(0, 0),
+		ChunkInfo->Sections[Index].UV0.Append({
+			FVector2D(Width / 4.f, Height / 4.f),
+			FVector2D(0 / 4.f, Height / 4.f),
+			FVector2D(Width / 4.f, 0 / 4.f),
+			FVector2D(0 / 4.f, 0 / 4.f),
 		});
 	}
 	else
 	{
-		ChunkInfo->MeshData.UV0.Append({
-			FVector2D(Height, Width),
-			FVector2D(Height, 0),
-			FVector2D(0, Width),
-			FVector2D(0, 0),
+		ChunkInfo->Sections[Index].UV0.Append({
+			FVector2D(Height / 4.f, Width / 4.f),
+			FVector2D(Height / 4.f, 0 / 4.f),
+			FVector2D(0 / 4.f, Width / 4.f),
+			FVector2D(0 / 4.f, 0 / 4.f),
 		});
 	}
 
@@ -247,18 +253,36 @@ bool AChunkActor::CompareMask(FMask F1, FMask F2)
 	return F1.Block == F2.Block && F1.Normal == F2.Normal;
 }
 
-void AChunkActor::ApplyMesh() const
+void AChunkActor::ApplyMesh()
 {
 	ProceduralMesh->ClearAllMeshSections();
-	ProceduralMesh->CreateMeshSection(
-		0,
-		ChunkInfo->MeshData.Vertices,
-		ChunkInfo->MeshData.Triangles,
-		ChunkInfo->MeshData.Normals,
-		ChunkInfo->MeshData.UV0,
-		ChunkInfo->MeshData.Colors,
+	// ProceduralMesh->CreateMeshSection(
+	// 	0,
+	// 	ChunkInfo->Sections[0].Vertices,
+	// 	ChunkInfo->Sections[0].Triangles,
+	// 	ChunkInfo->Sections[0].Normals,
+	// 	ChunkInfo->Sections[0].UV0,
+	// 	ChunkInfo->Sections[0].Colors,
+	// 	TArray<FProcMeshTangent>(),
+	// 	false);
+	for (auto& Section : ChunkInfo->Sections)
+	{
+		FChunkMeshData& MeshData = Section.Value;
+		ProceduralMesh->CreateMeshSection(
+		Section.Key,
+		MeshData.Vertices,
+		MeshData.Triangles,
+		MeshData.Normals,
+		MeshData.UV0,
+		MeshData.Colors,
 		TArray<FProcMeshTangent>(),
 		false);
+		if (Section.Key == EBlockType::Stone)
+		{
+		UMaterialInstanceDynamic* DynamicMaterial = UMaterialInstanceDynamic::Create(M_B_Stone, this);
+		ProceduralMesh->SetMaterial(Section.Key, DynamicMaterial);
+		}
+	}
 }
 
 bool AChunkActor::Check(FVector Pos)

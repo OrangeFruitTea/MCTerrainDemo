@@ -31,7 +31,7 @@ public:
 	// chunk的世界位置
 	FVector ChunkWorldPosition;
 	// chunk 网格数据
-	FChunkMeshData MeshData;
+	TMap<EBlockType, FChunkMeshData> Sections;
 
 	TMap<uint64, EBlockType>* GetBlockData();
 	EBlockType GetBlock(const FIntVector& Vec);

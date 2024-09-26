@@ -13,5 +13,6 @@ enum EBlockType
 {
 	Null,
 	Air,
-	Stone
+	Stone,
+	Dirt
 };

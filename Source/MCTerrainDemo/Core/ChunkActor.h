@@ -5,8 +5,11 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "ProceduralMeshComponent.h"
+#include "Materials/MaterialInstanceConstant.h"
 #include "MCTerrainDemo/Core/Chunk.h"
 #include "ChunkActor.generated.h"
+
+inline UMaterialInstanceConstant* M_B_Stone = LoadObject<UMaterialInstanceConstant>(nullptr, TEXT("Engine.MaterialInstanceConstant'/Game/Materials/Blocks/MI_B_Stone.MI_B_Stone'"));
 
 UCLASS()
 class MCTERRAINDEMO_API AChunkActor : public AActor
@@ -63,7 +66,7 @@ private:
 	void CreateQuad(FMask Mask, FIntVector AxisMask, int Width, int Height, FIntVector V1, FIntVector V2, FIntVector V3, FIntVector V4);
 	bool CompareMask(FMask F1, FMask F2);
 	
-	void ApplyMesh() const;
+	void ApplyMesh();
 
 	bool Check(FVector Pos);
 

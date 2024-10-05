@@ -13,10 +13,10 @@ GlobalInfo::~GlobalInfo()
 
 EBlockType GlobalInfo::GetBlockByXYZ(const int X, const int Y, const int Z) const
 {
-	
+	return EBlockType::Null;	
 }
 
 EBlockType GlobalInfo::GetBlockByXYZ(const FIntVector& Vec) const
 {
-	
+	return EBlockType::Null;	
 }

@@ -36,18 +36,20 @@ TArray<FVector> AChunkActor::GetFaceVertices(EDirection Direction, FVector Posit
 	return Vertices;
 }
 
-void AChunkActor::CreateFace(EDirection Direction, FVector Position)
+void AChunkActor::CreateFace(EBlockType Index, EDirection Direction, FVector Position)
 {
-	// const auto Color = FColor::MakeRandomColor();
-	// const auto Normal = GetNormal(Direction);
-
-	// ChunkInfo->Sections.Vertices.Append(GetFaceVertices(Direction, Position));
-	// ChunkInfo->Sections[0].Triangles.Append({VertexCount+3, VertexCount+2, VertexCount, VertexCount+2,VertexCount+1, VertexCount});
-	// ChunkInfo->Sections[0].Normals.Append({Normal, Normal, Normal, Normal});
-	// ChunkInfo->Sections[0].Colors.Append({Color,Color,Color,Color});
-	// ChunkInfo->Sections[0].UV0.Append({FVector2d(1,1),FVector2d(1,0),FVector2d(0,0),FVector2d(0,1)});
+	if (!ChunkInfo->Sections.Contains(Index))
+    {
+    	ChunkInfo->Sections.Emplace(Index, FChunkMeshData());
+    }
+	const auto Color = FColor::MakeRandomColor();
+	const auto Normal = GetNormal(Direction);
+	ChunkInfo->Sections[Index].Vertices.Append(GetFaceVertices(Direction, Position));
+	ChunkInfo->Sections[Index].Triangles.Append({VertexCount+3, VertexCount+2, VertexCount, VertexCount+2,VertexCount+1, VertexCount});
+	ChunkInfo->Sections[Index].Normals.Append({Normal, Normal, Normal, Normal});
+	ChunkInfo->Sections[Index].Colors.Append({Color,Color,Color,Color});
+	ChunkInfo->Sections[Index].UV0.Append({FVector2d(1/4.f,1/4.f),FVector2d(1/4.f,0),FVector2d(0,0),FVector2d(0,1/4.f)});
 	VertexCount += 4;
-	
 }
 
 
@@ -226,22 +228,23 @@ void AChunkActor::CreateQuad(FMask Mask, FIntVector AxisMask, int Width, int Hei
 		Color,
 		Color
 	});
+	auto D4 = [](double input) -> double { return input / 4.f; };
 	if (Normal.X == 1 || Normal.X == -1)
 	{
 		ChunkInfo->Sections[Index].UV0.Append({
-			FVector2D(Width / 4.f, Height / 4.f),
-			FVector2D(0 / 4.f, Height / 4.f),
-			FVector2D(Width / 4.f, 0 / 4.f),
-			FVector2D(0 / 4.f, 0 / 4.f),
+			FVector2D(D4(Width), D4(Height)),
+			FVector2D(D4(0), D4(Height)),
+			FVector2D(D4(Width), D4(0)),
+			FVector2D(D4(0), D4(0)),
 		});
 	}
 	else
 	{
 		ChunkInfo->Sections[Index].UV0.Append({
-			FVector2D(Height / 4.f, Width / 4.f),
-			FVector2D(Height / 4.f, 0 / 4.f),
-			FVector2D(0 / 4.f, Width / 4.f),
-			FVector2D(0 / 4.f, 0 / 4.f),
+			FVector2D(D4(Height), D4(Width)),
+			FVector2D(D4(Height), D4(0)),
+			FVector2D(D4(0), D4(Width)),
+			FVector2D(D4(0), D4(0)),
 		});
 	}
 
@@ -255,7 +258,7 @@ bool AChunkActor::CompareMask(FMask F1, FMask F2)
 
 void AChunkActor::ApplyMesh()
 {
-	ProceduralMesh->ClearAllMeshSections();
+	// ProceduralMesh->ClearAllMeshSections();
 	// ProceduralMesh->CreateMeshSection(
 	// 	0,
 	// 	ChunkInfo->Sections[0].Vertices,
@@ -268,6 +271,7 @@ void AChunkActor::ApplyMesh()
 	for (auto& Section : ChunkInfo->Sections)
 	{
 		FChunkMeshData& MeshData = Section.Value;
+		ProceduralMesh->ClearMeshSection(Section.Key);
 		ProceduralMesh->CreateMeshSection(
 		Section.Key,
 		MeshData.Vertices,
@@ -281,6 +285,10 @@ void AChunkActor::ApplyMesh()
 		{
 		UMaterialInstanceDynamic* DynamicMaterial = UMaterialInstanceDynamic::Create(M_B_Stone, this);
 		ProceduralMesh->SetMaterial(Section.Key, DynamicMaterial);
+		} else if (Section.Key == EBlockType::Dirt)
+		{
+			UMaterialInstanceDynamic* DynamicMaterial = UMaterialInstanceDynamic::Create(M_B_Dirt, this);
+			ProceduralMesh->SetMaterial(Section.Key, DynamicMaterial);
 		}
 	}
 }
@@ -300,16 +308,12 @@ void AChunkActor::RenderMesh()
 	{
 		if (ChunkInfo->GetBlock(x,y,z) != EBlockType::Air)
 		{
-			// auto Pos = FVector3d(
-			// 	ChunkInfo->ChunkIndex.X+x, 
-			// 	ChunkInfo->ChunkIndex.Y+y,
-			// 	z);
 			auto Pos = ChunkInfo->GetBlockWorldPosition(x,y,z);
 			// auto Pos = FVector(x,y,z);
 			for (const auto Direction : {EDirection::Fwd,EDirection::Right,EDirection::Bwd,EDirection::Left,EDirection::Up,EDirection::Down})
 			{
 				if (Check(GetPositionInDirection(Direction, Pos)))
-				CreateFace(Direction, Pos);
+				CreateFace(ChunkInfo->GetBlock(x,y,z), Direction, Pos);
 			}
 			// GEngine->AddOnScreenDebugMessage(-1, 115.f, FColor::Red, FString::Printf(TEXT("Block Position: (%f, %f, %f)"), Pos.X, Pos.Y, Pos.Z));
 			// GetWorld()->SpawnActor<ABlock>(Pos * 1.75, FRotator::ZeroRotator);

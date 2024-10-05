@@ -10,6 +10,7 @@
 #include "ChunkActor.generated.h"
 
 inline UMaterialInstanceConstant* M_B_Stone = LoadObject<UMaterialInstanceConstant>(nullptr, TEXT("Engine.MaterialInstanceConstant'/Game/Materials/Blocks/MI_B_Stone.MI_B_Stone'"));
+inline UMaterialInstanceConstant* M_B_Dirt = LoadObject<UMaterialInstanceConstant>(nullptr, TEXT("Engine.MaterialInstanceConstant'/Game/Materials/Blocks/MI_B_Dirt.MI_B_Dirt'"));
 
 UCLASS()
 class MCTERRAINDEMO_API AChunkActor : public AActor
@@ -59,7 +60,7 @@ private:
 	TArray<FVector> GetFaceVertices(EDirection Direction, FVector Position) const;
 	FVector GetPositionInDirection(EDirection Direction, FVector Position) const;
 	FVector GetNormal(EDirection Direction) const;
-	void CreateFace(EDirection Direction, FVector Position);
+	void CreateFace(EBlockType BlockTYpe, EDirection Direction, FVector Position);
 
 	struct FMask {EBlockType Block; int Normal; };
 	// Greedy Render渲染方法

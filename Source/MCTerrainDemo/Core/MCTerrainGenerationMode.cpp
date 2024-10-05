@@ -50,8 +50,8 @@ void AMCTerrainGenerationMode::SpawnChunkActor(Chunk& NewChunk)
 	// NewChunkActor->SetActorLocationAndRotation(NewChunk.ChunkWorldPosition, FRotator::ZeroRotator);
 	// GEngine->AddOnScreenDebugMessage(-1, 115.f, FColor::Green, FString::Printf(TEXT("Chunk Position: (%f, %f)"), Pos.X, Pos.Y));
 	ChunkActors2Display.Emplace(NewChunkActor);
-	NewChunkActor->RenderMesh();
-	// NewChunkActor->RenderMeshGreedy();
+	// NewChunkActor->RenderMesh();
+	NewChunkActor->RenderMeshGreedy();
 	}
 }
 

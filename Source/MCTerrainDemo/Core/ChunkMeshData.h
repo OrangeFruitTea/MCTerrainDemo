@@ -10,6 +10,7 @@ struct FChunkMeshData
 {
 	GENERATED_BODY();
 public:
+	int VertexCount = 0;
 	TArray<FVector> Vertices;
 	TArray<int32> Triangles;
 	TArray<FVector> Normals;
@@ -21,6 +22,7 @@ public:
 
 inline void FChunkMeshData::Clear()
 {
+	VertexCount = 0;
 	Vertices.Empty();
 	Triangles.Empty();
 	Normals.Empty();

@@ -45,11 +45,11 @@ void AChunkActor::CreateFace(EBlockType Index, EDirection Direction, FVector Pos
 	const auto Color = FColor::MakeRandomColor();
 	const auto Normal = GetNormal(Direction);
 	ChunkInfo->Sections[Index].Vertices.Append(GetFaceVertices(Direction, Position));
-	ChunkInfo->Sections[Index].Triangles.Append({VertexCount+3, VertexCount+2, VertexCount, VertexCount+2,VertexCount+1, VertexCount});
+	ChunkInfo->Sections[Index].Triangles.Append({ChunkInfo->Sections[Index].VertexCount+3, ChunkInfo->Sections[Index].VertexCount+2, ChunkInfo->Sections[Index].VertexCount, ChunkInfo->Sections[Index].VertexCount+2,ChunkInfo->Sections[Index].VertexCount+1, ChunkInfo->Sections[Index].VertexCount});
 	ChunkInfo->Sections[Index].Normals.Append({Normal, Normal, Normal, Normal});
 	ChunkInfo->Sections[Index].Colors.Append({Color,Color,Color,Color});
 	ChunkInfo->Sections[Index].UV0.Append({FVector2d(1/4.f,1/4.f),FVector2d(1/4.f,0),FVector2d(0,0),FVector2d(0,1/4.f)});
-	VertexCount += 4;
+	ChunkInfo->Sections[Index].VertexCount += 4;
 }
 
 
@@ -115,7 +115,7 @@ void AChunkActor::RenderMeshGreedy()
 				{
 					const auto CurrentBlock = ChunkInfo->GetBlock(ChunkItr);
 					const auto CompareBlock = ChunkInfo->GetBlock(ChunkItr + AxisMask);
-
+					
 					const bool CurrentBlockOpaque = (CurrentBlock != EBlockType::Air && CurrentBlock != EBlockType::Null);
 					const bool CompareBlockOpaque = (CompareBlock != EBlockType::Air && CurrentBlock != EBlockType::Null);
 					if (CurrentBlockOpaque == CompareBlockOpaque)
@@ -193,9 +193,9 @@ void AChunkActor::RenderMeshGreedy()
 void AChunkActor::CreateQuad(FMask Mask, FIntVector AxisMask, int Width, int Height, FIntVector V1, FIntVector V2,
                              FIntVector V3, FIntVector V4)
 {
-	EBlockType Index = Mask.Block;
+	const EBlockType Index = Mask.Block;
 	const auto Normal = FVector(AxisMask * Mask.Normal);
-	const auto Color = FColor(0, 0, 0);
+	constexpr auto Color = FColor(0, 0, 0);
 
 	if (!ChunkInfo->Sections.Contains(Index))
 	{
@@ -209,12 +209,12 @@ void AChunkActor::CreateQuad(FMask Mask, FIntVector AxisMask, int Width, int Hei
 		FVector(V4)*100 + ChunkInfo->ChunkWorldPosition*99
 	});
 	ChunkInfo->Sections[Index].Triangles.Append({
-		VertexCount,
-		VertexCount + 2 + Mask.Normal,
-		VertexCount + 2 - Mask.Normal,
-		VertexCount + 3,
-		VertexCount + 1 - Mask.Normal,
-		VertexCount + 1 + Mask.Normal
+		ChunkInfo->Sections[Index].VertexCount,
+		ChunkInfo->Sections[Index].VertexCount + 2 + Mask.Normal,
+		ChunkInfo->Sections[Index].VertexCount + 2 - Mask.Normal,
+		ChunkInfo->Sections[Index].VertexCount + 3,
+		ChunkInfo->Sections[Index].VertexCount + 1 - Mask.Normal,
+		ChunkInfo->Sections[Index].VertexCount + 1 + Mask.Normal
 	});
 	ChunkInfo->Sections[Index].Normals.Append({
 		Normal,
@@ -248,7 +248,7 @@ void AChunkActor::CreateQuad(FMask Mask, FIntVector AxisMask, int Width, int Hei
 		});
 	}
 
-	VertexCount += 4;
+	ChunkInfo->Sections[Index].VertexCount += 4;
 }
 
 bool AChunkActor::CompareMask(FMask F1, FMask F2)

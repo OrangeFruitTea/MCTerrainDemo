@@ -17,9 +17,6 @@ class MCTERRAINDEMO_API AChunkActor : public AActor
 {
 	GENERATED_BODY()
 private:
-
-	int VertexCount = 0;
-
 	TArray<FVector> VertexData;
 	TArray<int32> TriangleData;
 	TArray<FVector2d> UVData;

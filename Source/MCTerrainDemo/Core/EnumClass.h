@@ -12,7 +12,14 @@ UENUM()
 enum EBlockType
 {
 	Null,
+	Default,
 	Air,
+	Dirt,
 	Stone,
-	Dirt
+	GrassBlock,
+	Sand,
+	CobbleStone,
+	Log,
+	NetherRock,
+	
 };

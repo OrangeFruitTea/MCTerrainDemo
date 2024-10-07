@@ -12,9 +12,9 @@ void HeightGenerator::GenerateDensity(Chunk& Chunk)
 	// 噪声振幅
 	float MaxHeight[3] = {1.f, .5f, .25f};
 		// 预处理柏林噪声
-	for (int i = 0; i < MaxBlockWidth; i++)
-	for (int j = 0; j < MaxBlockWidth; j++)
-	for (int k = 0; k < MaxBlockHeight; k++)
+	for (int x = 0; x < MaxBlockWidth; x++)
+	for (int y = 0; y < MaxBlockWidth; y++)
+	for (int z = 0; z < MaxBlockHeight; z++)
 	{
 		float Density = 0;
 		int Seed = 1357;
@@ -32,13 +32,13 @@ void HeightGenerator::GenerateDensity(Chunk& Chunk)
 		// }
 		for (int T = 0; T < 3; T++)
 		{
-			// Density += Weight[T] * NoiseLite->SinglePerlin(Seed++, (Chunk.ChunkWorldPosition.X/100+i), (Chunk.ChunkWorldPosition.Y/100+j), (1.75f/2.f+k));
+			Density += Weight[T] * NoiseLite->GetNoise(x+Chunk.ChunkWorldPosition.X, y+Chunk.ChunkWorldPosition.Y, double(z));
 		}
 		// Density = FMath::Clamp(Density, -1, 1);
 		// GEngine->AddOnScreenDebugMessage(-1, 115.f, FColor::Red, FString::Printf(TEXT("Block Density: (%f)"), Density));
-		if (Density >= .0f)
+		if (Density >= -0.2f)
 		{
-			Chunk.AddBlock2Data(EBlockType::Stone,i,j,k);
+			Chunk.AddBlock2Data(EBlockType::Stone,x,y,z);
 		}
 	}
 }
@@ -49,17 +49,20 @@ void HeightGenerator::GenerateHeight(Chunk& Chunk)
 	for (int y = 0; y < MaxBlockWidth; y++)
 	{
 		const auto NoiseValue = NoiseLite->GetNoise(x+Chunk.ChunkWorldPosition.X, y+Chunk.ChunkWorldPosition.Y);
- 		// GEngine->AddOnScreenDebugMessage(-1, 115.f, FColor::Red, FString::Printf(TEXT("Block Height: (%f)"), NoiseValue*10));
+ 		// GEngine->AddOnScreenDebugMessage(-1, 115.f, FColor::Red, FString::Printf(TEXT("Noise Value: (%f)"), NoiseValue));
 		// if (NoiseValue >= -0.6f)
 		{
 			// Chunk.AddBlock2Data(EBlockType::Stone, x,y,NoiseValue*10);
 			for (int i = 0; i < NoiseValue*MaxBlockHeight+3; i++)
 			{
-				if (i < NoiseValue*MaxBlockHeight)
+				if (i < NoiseValue*MaxBlockHeight-3)
 					Chunk.AddBlock2Data(EBlockType::Stone, x,y,i);
-				else
+				else if (i < NoiseValue*MaxBlockHeight-1)
 				{
 					Chunk.AddBlock2Data(EBlockType::Dirt, x,y,i);
+				} else
+				{
+					Chunk.AddBlock2Data(EBlockType::GrassBlock, x,y,i);
 				}
 			}
 		}

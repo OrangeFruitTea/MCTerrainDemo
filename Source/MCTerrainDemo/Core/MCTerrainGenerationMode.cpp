@@ -26,7 +26,7 @@ Chunk* AMCTerrainGenerationMode::LoadChunk(int x, int y, const FVector& PosInput
 		{
 			// chunk信息载入至Info中
 			Chunks.Emplace(Index, Chunk(x, y, PosInput));
-			// GEngine->AddOnScreenDebugMessage(-1, 115.f, FColor::Green, FString::Printf(TEXT("Chunk Number: (%f, %f)"), PosInput.X, PosInput.Y));
+			GEngine->AddOnScreenDebugMessage(-1, 115.f, FColor::Green, FString::Printf(TEXT("Chunk Number: (%f, %f)"), PosInput.X, PosInput.Y));
 			Chunk& NewChunk = Chunks[Index];
 
 			// 数据生成

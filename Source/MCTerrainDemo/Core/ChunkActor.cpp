@@ -195,7 +195,8 @@ void AChunkActor::CreateQuad(FMask Mask, FIntVector AxisMask, int Width, int Hei
 {
 	const EBlockType Index = Mask.Block;
 	const auto Normal = FVector(AxisMask * Mask.Normal);
-	constexpr auto Color = FColor(0, 0, 0);
+	const auto TextureIndex = GetTextureIndex(Mask.Block, Normal);
+	auto Color = FColor(0, 0, 0, TextureIndex);
 
 	if (!ChunkInfo->Sections.Contains(Index))
 	{
@@ -228,23 +229,23 @@ void AChunkActor::CreateQuad(FMask Mask, FIntVector AxisMask, int Width, int Hei
 		Color,
 		Color
 	});
-	auto D4 = [](double input) -> double { return input / 4.f; };
+	auto PreHandle = [](double input) -> double { return input; };
 	if (Normal.X == 1 || Normal.X == -1)
 	{
 		ChunkInfo->Sections[Index].UV0.Append({
-			FVector2D(D4(Width), D4(Height)),
-			FVector2D(D4(0), D4(Height)),
-			FVector2D(D4(Width), D4(0)),
-			FVector2D(D4(0), D4(0)),
+			FVector2D(PreHandle(Width), PreHandle(Height)),
+			FVector2D(PreHandle(0), PreHandle(Height)),
+			FVector2D(PreHandle(Width), PreHandle(0)),
+			FVector2D(PreHandle(0), PreHandle(0)),
 		});
 	}
 	else
 	{
 		ChunkInfo->Sections[Index].UV0.Append({
-			FVector2D(D4(Height), D4(Width)),
-			FVector2D(D4(Height), D4(0)),
-			FVector2D(D4(0), D4(Width)),
-			FVector2D(D4(0), D4(0)),
+			FVector2D(PreHandle(Height), PreHandle(Width)),
+			FVector2D(PreHandle(Height), PreHandle(0)),
+			FVector2D(PreHandle(0), PreHandle(Width)),
+			FVector2D(PreHandle(0), PreHandle(0)),
 		});
 	}
 
@@ -280,16 +281,9 @@ void AChunkActor::ApplyMesh()
 		MeshData.UV0,
 		MeshData.Colors,
 		TArray<FProcMeshTangent>(),
-		false);
-		if (Section.Key == EBlockType::Stone)
-		{
-		UMaterialInstanceDynamic* DynamicMaterial = UMaterialInstanceDynamic::Create(M_B_Stone, this);
+		true);
+		UMaterialInstanceDynamic* DynamicMaterial = UMaterialInstanceDynamic::Create(M_BlockBase, this);
 		ProceduralMesh->SetMaterial(Section.Key, DynamicMaterial);
-		} else if (Section.Key == EBlockType::Dirt)
-		{
-			UMaterialInstanceDynamic* DynamicMaterial = UMaterialInstanceDynamic::Create(M_B_Dirt, this);
-			ProceduralMesh->SetMaterial(Section.Key, DynamicMaterial);
-		}
 	}
 }
 
@@ -298,6 +292,32 @@ bool AChunkActor::Check(FVector Pos)
 	if (Pos.X >= MaxBlockWidth || Pos.Y >= MaxBlockWidth || Pos.X < 0 || Pos.Y < 0 || Pos.Z < 0) return true;
 	if (Pos.Z >= MaxBlockHeight) return true;
 	return ChunkInfo->GetBlock(Pos.X, Pos.Y, Pos.Z) == EBlockType::Air;
+}
+
+int32 AChunkActor::GetTextureIndex(EBlockType Type, const FVector& Normal) const
+{
+	switch (Type)
+	{
+	case EBlockType::Default: return 0;
+	case EBlockType::Stone: return 1;
+	case EBlockType::Dirt: return 2;
+	case EBlockType::GrassBlock:
+		{
+			if (Normal == FVector::DownVector) return 2;
+			if (Normal == FVector::UpVector) return 4;
+			return 3;
+		}
+	case EBlockType::Sand: return 5;
+	case EBlockType::CobbleStone: return 6;
+	case EBlockType::Log:
+		{
+			if (Normal == FVector::UpVector|| Normal == FVector::DownVector) return 8;
+			return 7;
+		}
+	case EBlockType::NetherRock: return 9;
+	default: ;
+	}
+	return 255;
 }
 
 void AChunkActor::RenderMesh()

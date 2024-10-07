@@ -6,8 +6,8 @@
 #include "MCTerrainDemo/Core/EnumClass.h"
 #include "MCTerrainDemo/Core/ChunkMeshData.h"
 
-constexpr size_t MaxBlockWidth = 16;
-constexpr size_t MaxBlockHeight = 32;
+constexpr int32 MaxBlockWidth = 16;
+constexpr int32 MaxBlockHeight = 64;
 
 constexpr int32 BlockSize = 50;
 constexpr int32 BlockSizeHalf = BlockSize/2;

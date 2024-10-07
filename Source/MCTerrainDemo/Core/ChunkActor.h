@@ -9,8 +9,7 @@
 #include "MCTerrainDemo/Core/Chunk.h"
 #include "ChunkActor.generated.h"
 
-inline UMaterialInstanceConstant* M_B_Stone = LoadObject<UMaterialInstanceConstant>(nullptr, TEXT("Engine.MaterialInstanceConstant'/Game/Materials/Blocks/MI_B_Stone.MI_B_Stone'"));
-inline UMaterialInstanceConstant* M_B_Dirt = LoadObject<UMaterialInstanceConstant>(nullptr, TEXT("Engine.MaterialInstanceConstant'/Game/Materials/Blocks/MI_B_Dirt.MI_B_Dirt'"));
+inline UMaterialInstanceConstant* M_BlockBase = LoadObject<UMaterialInstanceConstant>(nullptr, TEXT("Engine.MaterialInstanceConstant'/Game/Materials/Blocks/MI_BlockBase.MI_BlockBase'"));
 
 UCLASS()
 class MCTERRAINDEMO_API AChunkActor : public AActor
@@ -67,6 +66,9 @@ private:
 	void ApplyMesh();
 
 	bool Check(FVector Pos);
+
+	// 获取对应方块面的材质索引
+	int32 GetTextureIndex(EBlockType Type, const FVector& Normal) const;
 
 protected:
 	virtual void BeginPlay() override;

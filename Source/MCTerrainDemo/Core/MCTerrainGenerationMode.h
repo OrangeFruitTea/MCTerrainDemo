@@ -16,6 +16,7 @@ class MCTERRAINDEMO_API AMCTerrainGenerationMode : public AGameModeBase
 protected:
 	// 世界中心位置
 	FVector WorldCenterLocation = FVector(0, 0, 0);
+	FIntVector PlayerWorldLocation = FIntVector(0, 0, 0);
 	// world中的所有chunk
 	TMap<uint64,Chunk> Chunks;
 	// 用于显示的chunk

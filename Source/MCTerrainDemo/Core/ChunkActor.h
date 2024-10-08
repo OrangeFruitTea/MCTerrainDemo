@@ -39,7 +39,7 @@ private:
 		5,4,1,0, // up
 		3,2,7,6  // down
 	};
-	
+
 	Chunk* ChunkInfo;
 public:
 	UPROPERTY(EditAnywhere, Category="Setup")
@@ -51,6 +51,8 @@ public:
 	// 渲染chunk actor中的方块
 	void RenderMesh();
 	void RenderMeshGreedy();
+	UFUNCTION(BlueprintCallable)
+	FIntPoint GetChunkActorIndex();
 private:
 	// 渲染区块方块
 	TArray<FVector> GetFaceVertices(EDirection Direction, FVector Position) const;

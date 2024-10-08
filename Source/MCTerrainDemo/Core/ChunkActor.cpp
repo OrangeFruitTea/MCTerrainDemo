@@ -15,9 +15,6 @@ AChunkActor::AChunkActor()
 void AChunkActor::InitChunkActor(Chunk* Info)
 {
 	ChunkInfo = Info;
-	const FString NewString = "ChunkActor_" + FString::FromInt(Info->ChunkIndex.X) + FString::FromInt(Info->ChunkIndex.Y);
-	const TCHAR* NewName = *NewString;
-	this->Rename(NewName);
 }
 
 // Called when the game starts or when spawned
@@ -187,7 +184,13 @@ void AChunkActor::RenderMeshGreedy()
 			}
 		}
 	}
+	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Green, FString::Printf(TEXT("Calculating...")));
 	ApplyMesh();
+}
+
+FIntPoint AChunkActor::GetChunkActorIndex()
+{
+	return ChunkInfo->ChunkIndex;
 }
 
 void AChunkActor::CreateQuad(FMask Mask, FIntVector AxisMask, int Width, int Height, FIntVector V1, FIntVector V2,
@@ -269,6 +272,7 @@ void AChunkActor::ApplyMesh()
 	// 	ChunkInfo->Sections[0].Colors,
 	// 	TArray<FProcMeshTangent>(),
 	// 	false);
+	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Green, FString::Printf(TEXT("Section Count: %d"), ChunkInfo->Sections.Num()));
 	for (auto& Section : ChunkInfo->Sections)
 	{
 		FChunkMeshData& MeshData = Section.Value;

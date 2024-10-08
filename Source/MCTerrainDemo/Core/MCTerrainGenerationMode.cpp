@@ -2,16 +2,30 @@
 
 
 #include "MCTerrainGenerationMode.h"
+
+#include "Kismet/GameplayStatics.h"
 #include "MCTerrainDemo/Generator/HeightGenerator.h"
 #include "MCTerrainDemo/Tool/IndexTool.h"
 
 void AMCTerrainGenerationMode::UpdateChunks()
 {
+	const APlayerController* Controller = UGameplayStatics::GetPlayerController(this, 0);
+	if (Controller != nullptr)
+	{
+		const APawn* Pawn = Controller->GetPawn();
+		if (Pawn != nullptr)
+		{
+			PlayerWorldLocation = static_cast<FIntVector>(Pawn->GetActorLocation() / 100.f);
+		}
+	}
+	// 当前玩家所处的区块Index
+	const FIntPoint ChunkIndex = {PlayerWorldLocation.X / MaxBlockWidth, PlayerWorldLocation.Y / MaxBlockWidth};
 	for (int i = -DrawDistance; i <= DrawDistance; i++)
 	for (int j = -DrawDistance; j <= DrawDistance; j++)
 	{
-		const FVector PosInput = FVector(MaxBlockWidth*(i)+(WorldCenterLocation.X), MaxBlockWidth*(j)+(WorldCenterLocation.Y), 0.0f);
-		Chunk* NewChunk = LoadChunk(i,j,PosInput);
+		// const FVector PosInput = FVector(MaxBlockWidth*(i)+(WorldCenterLocation.X), MaxBlockWidth*(j)+(WorldCenterLocation.Y), 0.0f);
+		const FVector PosInput = FVector(MaxBlockWidth*(i)+(PlayerWorldLocation.X), MaxBlockWidth*(j)+(PlayerWorldLocation.Y), 0.0f);
+		Chunk* NewChunk = LoadChunk(ChunkIndex.X + i,ChunkIndex.Y + j,PosInput);
 		if (NewChunk)
 		{
 			SpawnChunkActor(*NewChunk);
@@ -21,20 +35,21 @@ void AMCTerrainGenerationMode::UpdateChunks()
 
 Chunk* AMCTerrainGenerationMode::LoadChunk(int x, int y, const FVector& PosInput)
 {
-		uint64 Index = IndexTool::Index(PosInput.X, PosInput.Y, PosInput.Z);
-		if (!Chunks.Contains(Index))
-		{
-			// chunk信息载入至Info中
-			Chunks.Emplace(Index, Chunk(x, y, PosInput));
-			GEngine->AddOnScreenDebugMessage(-1, 115.f, FColor::Green, FString::Printf(TEXT("Chunk Number: (%f, %f)"), PosInput.X, PosInput.Y));
-			Chunk& NewChunk = Chunks[Index];
+	// 根据ChunkIndex判断是否已经生成Chunk
+	uint64 Index = IndexTool::Index(x, y);
+	if (!Chunks.Contains(Index))
+	{
+		// chunk信息载入至Info中
+		Chunks.Emplace(Index, Chunk(x, y, PosInput));
+		// GEngine->AddOnScreenDebugMessage(-1, 115.f, FColor::Green, FString::Printf(TEXT("Chunk Number: (%f, %f)"), PosInput.X, PosInput.Y));
+		Chunk& NewChunk = Chunks[Index];
 
-			// 数据生成
-			// HeightGenerator::GenerateDensity(NewChunk);
-			HeightGenerator::GenerateHeight(NewChunk);
+		// 数据生成
+		// HeightGenerator::GenerateDensity(NewChunk);
+		HeightGenerator::GenerateHeight(NewChunk);
 
-			return &NewChunk;
-		}
+		return &NewChunk;
+	}
 	return nullptr;
 }
 

@@ -24,7 +24,7 @@ void AMCTerrainGenerationMode::UpdateChunks()
 	for (int j = -DrawDistance; j <= DrawDistance; j++)
 	{
 		// const FVector PosInput = FVector(MaxBlockWidth*(i)+(WorldCenterLocation.X), MaxBlockWidth*(j)+(WorldCenterLocation.Y), 0.0f);
-		const FVector PosInput = FVector(MaxBlockWidth*(i)+(PlayerWorldLocation.X), MaxBlockWidth*(j)+(PlayerWorldLocation.Y), 0.0f);
+		const FVector PosInput = FVector(MaxBlockWidth*(i+ChunkIndex.X), MaxBlockWidth*(j+ChunkIndex.Y), 0.0f);
 		Chunk* NewChunk = LoadChunk(ChunkIndex.X + i,ChunkIndex.Y + j,PosInput);
 		if (NewChunk)
 		{

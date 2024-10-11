@@ -190,6 +190,11 @@ void AChunkActor::RenderMeshGreedy()
 
 FIntPoint AChunkActor::GetChunkActorIndex()
 {
+	if (ChunkInfo != nullptr)
+	{
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Chunk Error: Empty Info")));
+		return {-114, -514};
+	}
 	return ChunkInfo->ChunkIndex;
 }
 
@@ -207,10 +212,10 @@ void AChunkActor::CreateQuad(FMask Mask, FIntVector AxisMask, int Width, int Hei
 	}
 
 	ChunkInfo->Sections[Index].Vertices.Append({
-		FVector(V1)*100 + ChunkInfo->ChunkWorldPosition*99,
-		FVector(V2)*100 + ChunkInfo->ChunkWorldPosition*99,
-		FVector(V3)*100 + ChunkInfo->ChunkWorldPosition*99,
-		FVector(V4)*100 + ChunkInfo->ChunkWorldPosition*99
+		FVector(V1)*100 + ChunkInfo->ChunkWorldPosition*100,
+		FVector(V2)*100 + ChunkInfo->ChunkWorldPosition*100,
+		FVector(V3)*100 + ChunkInfo->ChunkWorldPosition*100,
+		FVector(V4)*100 + ChunkInfo->ChunkWorldPosition*100
 	});
 	ChunkInfo->Sections[Index].Triangles.Append({
 		ChunkInfo->Sections[Index].VertexCount,

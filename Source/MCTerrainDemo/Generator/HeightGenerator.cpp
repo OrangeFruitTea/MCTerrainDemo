@@ -3,6 +3,8 @@
 
 #include "HeightGenerator.h"
 
+#include "ContinentalnessGenerator.h"
+
 void HeightGenerator::GenerateDensity(Chunk& Chunk)
 {
 	// 噪声晶格大小
@@ -17,7 +19,6 @@ void HeightGenerator::GenerateDensity(Chunk& Chunk)
 	for (int z = 0; z < MaxBlockHeight; z++)
 	{
 		float Density = 0;
-		int Seed = 1357;
 		// int Amp = 1.f;
 		// 叠加三次噪声作为区块密度
 		// for (int T = 0; T < 3; T++)
@@ -36,7 +37,7 @@ void HeightGenerator::GenerateDensity(Chunk& Chunk)
 		}
 		// Density = FMath::Clamp(Density, -1, 1);
 		// GEngine->AddOnScreenDebugMessage(-1, 115.f, FColor::Red, FString::Printf(TEXT("Block Density: (%f)"), Density));
-		if (Density >= -0.2f)
+		if (Density >= -0.35f)
 		{
 			Chunk.AddBlock2Data(EBlockType::Stone,x,y,z);
 		}
@@ -52,12 +53,14 @@ void HeightGenerator::GenerateHeight(Chunk& Chunk)
  		// GEngine->AddOnScreenDebugMessage(-1, 115.f, FColor::Red, FString::Printf(TEXT("Noise Value: (%f)"), NoiseValue));
 		// if (NoiseValue >= -0.6f)
 		{
+			const float CrvCtnl = ContinentalnessGenerator::GetCrvValue(Chunk.GetContinental(x,y));
+			const int FinalHeight = floor((NoiseValue*16+16) * CrvCtnl);
 			// Chunk.AddBlock2Data(EBlockType::Stone, x,y,NoiseValue*10);
-			for (int i = 0; i <= NoiseValue*16+16; i++)
+			for (int i = 0; i <= FinalHeight; i++)
 			{
-				if (i < NoiseValue*16+14)
+				if (i < FinalHeight-2)
 					Chunk.AddBlock2Data(EBlockType::Stone, x,y,i);
-				else if (i < NoiseValue*16+15)
+				else if (i < FinalHeight-1)
 				{
 					Chunk.AddBlock2Data(EBlockType::Dirt, x,y,i);
 				} else

@@ -5,6 +5,7 @@
 
 #include "Kismet/GameplayStatics.h"
 #include "MCTerrainDemo/Generator/HeightGenerator.h"
+#include "MCTerrainDemo/Generator/ContinentalnessGenerator.h"
 #include "MCTerrainDemo/Tool/IndexTool.h"
 
 void AMCTerrainGenerationMode::UpdateChunks()
@@ -45,6 +46,7 @@ Chunk* AMCTerrainGenerationMode::LoadChunk(int x, int y, const FVector& PosInput
 		Chunk& NewChunk = Chunks[Index];
 
 		// 数据生成
+		ContinentalnessGenerator::GenerateContinental(NewChunk);
 		// HeightGenerator::GenerateDensity(NewChunk);
 		HeightGenerator::GenerateHeight(NewChunk);
 

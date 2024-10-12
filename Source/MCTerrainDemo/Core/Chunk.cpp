@@ -27,6 +27,26 @@ void Chunk::AddBlock2Data(EBlockType BlockType, const int X, const int Y, const 
 	Blocks.Emplace(DataIndex, BlockType);
 }
 
+float Chunk::GetContinental(const int X, const int Y, const int Z)
+{
+	const uint64 DataIndex = Index(X,Y,Z);
+	if (Continental.Contains(DataIndex))
+		return Continental[DataIndex];
+	return 0.f;
+}
+
+void Chunk::SetContinental(const int X, const int Y, const int Z, float Value)
+{
+	uint64 DataIndex = Index(X,Y,Z);
+	Continental.Emplace(DataIndex, Value);
+	
+}
+
+float Chunk::GetContinental(const int X, const int Y)
+{
+	return GetContinental(X,Y,16);
+}
+
 FVector Chunk::GetBlockWorldPosition(const int X, const int Y, const int Z) const 
 {
 	// 计算方块在世界中的位置
@@ -66,7 +86,8 @@ FIntVector Chunk::UnIndex(const uint64 Index) const
 Chunk::Chunk(int32 X, int32 Y, FVector Position)
 	: Blocks{},
 	ChunkIndex{X, Y},
-	BlockDensity{0}
+	BlockDensity{},
+	Continental{}
 {
 	ChunkWorldPosition = Position;
 }

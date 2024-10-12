@@ -7,7 +7,7 @@
 #include "MCTerrainDemo/Core/ChunkMeshData.h"
 
 constexpr int32 MaxBlockWidth = 16;
-constexpr int32 MaxBlockHeight = 64;
+constexpr int32 MaxBlockHeight = 96;
 
 constexpr int32 BlockSize = 50;
 constexpr int32 BlockSizeHalf = BlockSize/2;
@@ -43,5 +43,12 @@ public:
 	// 向chunk数据中加入block, XYZ: 对应的数组下标
 	void AddBlock2Data(EBlockType BlockType, const int X, const int Y, const int Z);
 	// chunk地形密度[-1.f, 1.f]
-	float BlockDensity[MaxBlockWidth][MaxBlockWidth][MaxBlockHeight];
+	TMap<uint64, float> BlockDensity;
+	// chunk大陆性
+private:
+	TMap<uint64, float> Continental;
+public:
+	void SetContinental(const int X, const int Y, const int Z, float Value);
+	float GetContinental(const int X, const int Y);
+	float GetContinental(const int X, const int Y, const int Z);
 };

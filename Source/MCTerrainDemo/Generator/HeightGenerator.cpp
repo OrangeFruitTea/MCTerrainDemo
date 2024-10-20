@@ -44,6 +44,11 @@ void HeightGenerator::GenerateDensity(Chunk& Chunk)
 	}
 }
 
+void HeightGenerator::SetSeed(const int32 Seed)
+{
+	NoiseLite->SetSeed(Seed);
+}
+
 void HeightGenerator::GenerateHeight(Chunk& Chunk)
 {
 	for (int x = 0; x < MaxBlockWidth; x++)

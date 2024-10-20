@@ -7,6 +7,7 @@
 #include "MCTerrainDemo/Generator/HeightGenerator.h"
 #include "MCTerrainDemo/Generator/ContinentalnessGenerator.h"
 #include "MCTerrainDemo/Tool/IndexTool.h"
+#include "MCTerrainDemo/Generator/ChunkBuilder.h"
 
 void AMCTerrainGenerationMode::UpdateChunks()
 {
@@ -29,7 +30,8 @@ void AMCTerrainGenerationMode::UpdateChunks()
 		Chunk* NewChunk = LoadChunk(ChunkIndex.X + i,ChunkIndex.Y + j,PosInput);
 		if (NewChunk)
 		{
-			SpawnChunkActor(*NewChunk);
+			// SpawnChunkActor(*NewChunk);
+			ChunkBuilder::GenerateChunkMesh(GetWorld(), *NewChunk);
 		}
 	}
 }
@@ -55,22 +57,22 @@ Chunk* AMCTerrainGenerationMode::LoadChunk(int x, int y, const FVector& PosInput
 	return nullptr;
 }
 
-void AMCTerrainGenerationMode::SpawnChunkActor(Chunk& NewChunk)
-{
-	const FTransform NewTrans = FTransform(FRotator::ZeroRotator,NewChunk.ChunkWorldPosition);
-	// AChunkActor* NewChunkActor = GetWorld()->SpawnActor<AChunkActor>(AChunkActor::StaticClass(), PosInput, FRotator::ZeroRotator);
-	auto NewChunkActor = GetWorld()->SpawnActorDeferred<AChunkActor>(AChunkActor::StaticClass(), NewTrans);
-	if (NewChunkActor)
-	{
-	NewChunkActor->InitChunkActor(&NewChunk);
-	NewChunkActor->FinishSpawning(NewTrans);
-	// NewChunkActor->SetActorLocationAndRotation(NewChunk.ChunkWorldPosition, FRotator::ZeroRotator);
-	// GEngine->AddOnScreenDebugMessage(-1, 115.f, FColor::Green, FString::Printf(TEXT("Chunk Position: (%f, %f)"), Pos.X, Pos.Y));
-	ChunkActors2Display.Emplace(NewChunkActor);
-	// NewChunkActor->RenderMesh();
-	NewChunkActor->RenderMeshGreedy();
-	}
-}
+// void AMCTerrainGenerationMode::SpawnChunkActor(Chunk& NewChunk)
+// {
+// 	const FTransform NewTrans = FTransform(FRotator::ZeroRotator,NewChunk.ChunkWorldPosition);
+// 	// AChunkActor* NewChunkActor = GetWorld()->SpawnActor<AChunkActor>(AChunkActor::StaticClass(), PosInput, FRotator::ZeroRotator);
+// 	auto NewChunkActor = GetWorld()->SpawnActorDeferred<AChunkActor>(AChunkActor::StaticClass(), NewTrans);
+// 	if (NewChunkActor)
+// 	{
+// 	NewChunkActor->InitChunkActor(&NewChunk);
+// 	NewChunkActor->FinishSpawning(NewTrans);
+// 	// NewChunkActor->SetActorLocationAndRotation(NewChunk.ChunkWorldPosition, FRotator::ZeroRotator);
+// 	// GEngine->AddOnScreenDebugMessage(-1, 115.f, FColor::Green, FString::Printf(TEXT("Chunk Position: (%f, %f)"), Pos.X, Pos.Y));
+// 	ChunkActors2Display.Emplace(NewChunkActor);
+// 	// NewChunkActor->RenderMesh();
+// 	NewChunkActor->RenderMeshGreedy();
+// 	}
+// }
 
 void AMCTerrainGenerationMode::TestGenerateWorld()
 {

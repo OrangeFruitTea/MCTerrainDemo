@@ -16,10 +16,12 @@ class MCTERRAINDEMO_API ContinentalnessGenerator
 {
 private:
 	static inline UCurveFloat* ContinentalCurve = nullptr;
-	static inline FastNoiseLite* NoiseLite = new FastNoiseLite(128);
+	static inline FastNoiseLite* NoiseLite = new FastNoiseLite();
 	static bool LoadCurve();
 public:
+	static void SetSeed(const int32 Seed);
 	static void GenerateContinental(Chunk& Chunk);
+	static void ClearContinental(Chunk& Chunk);
 	static float GetCrvValue(float Key);
 	ContinentalnessGenerator()=delete;
 	~ContinentalnessGenerator()=delete;

@@ -14,6 +14,11 @@ bool ContinentalnessGenerator::LoadCurve()
 	return false;
 }
 
+void ContinentalnessGenerator::SetSeed(const int32 Seed)
+{
+	NoiseLite->SetSeed(Seed);
+}
+
 void ContinentalnessGenerator::GenerateContinental(Chunk& Chunk)
 {
 	if (LoadCurve())

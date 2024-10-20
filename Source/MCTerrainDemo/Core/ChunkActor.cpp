@@ -296,14 +296,14 @@ void AChunkActor::ApplyMesh()
 	}
 }
 
-bool AChunkActor::Check(FVector Pos)
+bool AChunkActor::Check(const FVector& Pos) const
 {
 	if (Pos.X >= MaxBlockWidth || Pos.Y >= MaxBlockWidth || Pos.X < 0 || Pos.Y < 0 || Pos.Z < 0) return true;
 	if (Pos.Z >= MaxBlockHeight) return true;
 	return ChunkInfo->GetBlock(Pos.X, Pos.Y, Pos.Z) == EBlockType::Air;
 }
 
-int32 AChunkActor::GetTextureIndex(EBlockType Type, const FVector& Normal) const
+int32 AChunkActor::GetTextureIndex(EBlockType Type, const FVector& Normal)
 {
 	switch (Type)
 	{

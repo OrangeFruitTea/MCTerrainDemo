@@ -27,6 +27,20 @@ void Chunk::AddBlock2Data(EBlockType BlockType, const int X, const int Y, const 
 	Blocks.Emplace(DataIndex, BlockType);
 }
 
+void Chunk::SetDensity(const int X, const int Y, const int Z, float Value)
+{
+	uint64 DataIndex = Index(X,Y,Z);
+	Density.Emplace(DataIndex, Value);
+}
+
+float Chunk::GetDensity(const int X, const int Y, const int Z)
+{
+	const uint64 DataIndex = Index(X,Y,Z);
+	if (Density.Contains(DataIndex))
+		return Density[DataIndex];
+	return 0.f;
+}
+
 float Chunk::GetContinental(const int X, const int Y, const int Z)
 {
 	const uint64 DataIndex = Index(X,Y,Z);
@@ -86,7 +100,7 @@ FIntVector Chunk::UnIndex(const uint64 Index) const
 Chunk::Chunk(int32 X, int32 Y, FVector Position)
 	: Blocks{},
 	ChunkIndex{X, Y},
-	BlockDensity{},
+	Density{},
 	Continental{}
 {
 	ChunkWorldPosition = Position;

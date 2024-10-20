@@ -11,9 +11,10 @@ class FastNoiseLite;
 class MCTERRAINDEMO_API HeightGenerator
 {
 private:
-	static inline int32 DefaultHeight = 16;
-	static inline FastNoiseLite* NoiseLite = new FastNoiseLite(246);
+	static inline FastNoiseLite* NoiseLite = new FastNoiseLite();
 public:
+	static inline int32 DefaultHeight = 16;
+	static void SetSeed(const int32 Seed);
 	static void GenerateHeight(Chunk& Chunk);
 	static void GenerateDensity(Chunk& Chunk);
 	// static float GenerateDensity(const FVector Position);

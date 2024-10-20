@@ -67,10 +67,10 @@ private:
 	
 	void ApplyMesh();
 
-	bool Check(FVector Pos);
+	bool Check(const FVector& Pos) const;
 
 	// 获取对应方块面的材质索引
-	int32 GetTextureIndex(EBlockType Type, const FVector& Normal) const;
+	static int32 GetTextureIndex(EBlockType Type, const FVector& Normal);
 
 protected:
 	virtual void BeginPlay() override;

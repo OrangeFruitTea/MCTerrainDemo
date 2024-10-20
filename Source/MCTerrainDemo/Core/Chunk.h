@@ -43,7 +43,11 @@ public:
 	// 向chunk数据中加入block, XYZ: 对应的数组下标
 	void AddBlock2Data(EBlockType BlockType, const int X, const int Y, const int Z);
 	// chunk地形密度[-1.f, 1.f]
-	TMap<uint64, float> BlockDensity;
+private:
+	TMap<uint64, float> Density;
+public:
+	void SetDensity(const int X, const int Y, const int Z, float Value);
+	float GetDensity(const int X, const int Y, const int Z);
 	// chunk大陆性
 private:
 	TMap<uint64, float> Continental;

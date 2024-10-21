@@ -3,13 +3,21 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "MCTerrainDemo/Tool/FastNoiseLite.h"
+#include "MCTerrainDemo/Core/Chunk.h"
+
+class FastNoiseLite;
 
 /**
  * 
  */
 class MCTERRAINDEMO_API TemperatureGenerator
 {
+private:
+	static inline FastNoiseLite* NoiseLite = new FastNoiseLite();
 public:
-	TemperatureGenerator();
-	~TemperatureGenerator();
+	static void SetSeed(const int32 Seed);
+	static void GenerateTemperature(Chunk& Chunk);
+	TemperatureGenerator()=delete;
+	~TemperatureGenerator()=delete;
 };

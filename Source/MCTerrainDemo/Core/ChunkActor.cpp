@@ -10,17 +10,32 @@ AChunkActor::AChunkActor()
 	ProceduralMesh = CreateDefaultSubobject<UProceduralMeshComponent>("Mesh");
 	ProceduralMesh->SetCastShadow(false);
 	SetRootComponent(ProceduralMesh);
+	
+	if (!TextComp)
+        {
+            TextComp = CreateDefaultSubobject<UTextRenderComponent>(TEXT("TextComponent"));
+        }
+    
+        TextComp->SetRelativeScale3D(FVector(2.0f, 2.0f, 2.0f));
+        TextComp->SetWorldSize(100.0f); // Adjust the size as needed
+        TextComp->SetupAttachment(RootComponent);
 }
 
 void AChunkActor::InitChunkActor(Chunk* Info)
 {
 	ChunkInfo = Info;
+	const FString IndexText = FString::Printf(TEXT("%d, %d"), Info->ChunkIndex.X, Info->ChunkIndex.Y);
+	TextComp->SetText(FText::FromString(IndexText));	
 }
 
 // Called when the game starts or when spawned
 void AChunkActor::BeginPlay()
 {
 	Super::BeginPlay();
+	TextComp->RegisterComponent();
+	TextComp->SetRelativeLocation(FVector(100.f * (ChunkInfo->ChunkWorldPosition.X+8), 100.f * (ChunkInfo->ChunkWorldPosition.Y+8), 600.f));
+	TextComp->SetTextRenderColor(FColor::Yellow);
+	TextComp->SetRelativeRotation(FRotator(0.f, 180.f, 0.f));
 }
 
 TArray<FVector> AChunkActor::GetFaceVertices(EDirection Direction, FVector Position) const
@@ -190,7 +205,7 @@ void AChunkActor::RenderMeshGreedy()
 
 FIntPoint AChunkActor::GetChunkActorIndex()
 {
-	if (ChunkInfo != nullptr)
+	if (ChunkInfo == nullptr)
 	{
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Chunk Error: Empty Info")));
 		return {-114, -514};

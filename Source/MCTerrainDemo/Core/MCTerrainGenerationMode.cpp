@@ -21,7 +21,8 @@ void AMCTerrainGenerationMode::UpdateChunks()
 		}
 	}
 	// 当前玩家所处的区块Index
-	const FIntPoint ChunkIndex = {PlayerWorldLocation.X / MaxBlockWidth, PlayerWorldLocation.Y / MaxBlockWidth};
+	// const FIntPoint ChunkIndex = {PlayerWorldLocation.X / MaxBlockWidth, PlayerWorldLocation.Y / MaxBlockWidth};
+	const FIntPoint ChunkIndex = GetPlayerLocatedChunkIndex();
 	for (int i = -DrawDistance; i <= DrawDistance; i++)
 	for (int j = -DrawDistance; j <= DrawDistance; j++)
 	{
@@ -78,3 +79,34 @@ void AMCTerrainGenerationMode::TestGenerateWorld()
 {
 	UpdateChunks();
 }
+
+TArray<FIntPoint> AMCTerrainGenerationMode::GetAllChunks()
+{
+	TArray<FIntPoint> Vec;
+	for (auto Chunk : Chunks)
+	{
+		Vec.Emplace(Chunk.Value.ChunkIndex);
+	}
+	return Vec;
+}
+
+FIntPoint AMCTerrainGenerationMode::GetPlayerLocatedChunkIndex()
+{
+	const APlayerController* Controller = UGameplayStatics::GetPlayerController(this, 0);
+	if (Controller != nullptr)
+	{
+		const APawn* Pawn = Controller->GetPawn();
+		if (Pawn != nullptr)
+		{
+			PlayerWorldLocation = static_cast<FIntVector>(Pawn->GetActorLocation() / 100.f);
+		}
+	}
+	// 当前玩家所处的区块Index
+	int32 X = PlayerWorldLocation.X / MaxBlockWidth;
+	if (PlayerWorldLocation.X < 0) X -= 1;
+	int32 Y = PlayerWorldLocation.X / MaxBlockWidth;
+	if (PlayerWorldLocation.Y < 0) Y -= 1;
+	return FIntPoint{X, Y};
+}
+
+

@@ -27,9 +27,11 @@ protected:
 	void UpdateChunks();
 	// 加载输入chunk的数据信息 (密度等)
 	Chunk* LoadChunk(int x, int y, const FVector& PosInput);
-	// 生成chunk actor
-	void SpawnChunkActor(Chunk& Chunk);
 public:
 	UFUNCTION(BlueprintCallable, Category="TestFunc")
 	void TestGenerateWorld();
+	UFUNCTION(BlueprintCallable, Category="TestFunc")
+	TArray<FIntPoint> GetAllChunks();
+	UFUNCTION(BlueprintCallable, Category="TestFunc")
+	FIntPoint GetPlayerLocatedChunkIndex();
 };

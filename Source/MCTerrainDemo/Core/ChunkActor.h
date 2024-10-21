@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "ProceduralMeshComponent.h"
+#include "Components/TextRenderComponent.h"
 #include "Materials/MaterialInstanceConstant.h"
 #include "MCTerrainDemo/Core/Chunk.h"
 #include "ChunkActor.generated.h"
@@ -44,6 +45,8 @@ private:
 public:
 	UPROPERTY(EditAnywhere, Category="Setup")
 	UProceduralMeshComponent* ProceduralMesh;
+	UPROPERTY(EditAnywhere, Category="Setup")
+	UTextRenderComponent* TextComp;
 	
 public:
 	AChunkActor();

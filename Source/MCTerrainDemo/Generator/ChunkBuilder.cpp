@@ -3,6 +3,8 @@
 
 #include "ChunkBuilder.h"
 
+#include "MCTerrainDemo/Core/MCTerrainGenerationMode.h"
+
 void ChunkBuilder::SpawnStructStarts(Chunk& ChunkInfo)
 {
 }
@@ -57,4 +59,8 @@ void ChunkBuilder::GenerateChunkMesh(UWorld* World, Chunk& ChunkInfo)
 	// NewChunkActor->RenderMesh();
 	NewChunkActor->RenderMeshGreedy();
 	}
+}
+
+void ChunkBuilder::DeleteChunkMesh(UWorld* World, Chunk& ChunkInfo)
+{
 }

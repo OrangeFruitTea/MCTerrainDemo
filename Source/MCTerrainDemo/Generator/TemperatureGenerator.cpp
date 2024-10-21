@@ -1,12 +1,14 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Generator/TemperatureGenerator.h"
+#include "TemperatureGenerator.h"
 
-TemperatureGenerator::TemperatureGenerator()
+void TemperatureGenerator::SetSeed(const int32 Seed)
 {
+	NoiseLite->SetSeed(Seed);
 }
 
-TemperatureGenerator::~TemperatureGenerator()
+void TemperatureGenerator::GenerateTemperature(Chunk& Chunk)
 {
+	
 }

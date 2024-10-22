@@ -45,8 +45,9 @@ void ChunkBuilder::SpawnFeatures(Chunk& ChunkInfo)
 {
 }
 
-void ChunkBuilder::GenerateChunkMesh(UWorld* World, Chunk& ChunkInfo)
+void ChunkBuilder::GenerateChunkMesh(const AGameModeBase* GameMode, Chunk& ChunkInfo)
 {
+	UWorld* World = GameMode->GetWorld();
 	const FTransform NewTrans = FTransform(FRotator::ZeroRotator,ChunkInfo.ChunkWorldPosition);
 	// AChunkActor* NewChunkActor = GetWorld()->SpawnActor<AChunkActor>(AChunkActor::StaticClass(), PosInput, FRotator::ZeroRotator);
 	auto NewChunkActor = World->SpawnActorDeferred<AChunkActor>(AChunkActor::StaticClass(), NewTrans);
@@ -54,13 +55,11 @@ void ChunkBuilder::GenerateChunkMesh(UWorld* World, Chunk& ChunkInfo)
 	{
 	NewChunkActor->InitChunkActor(&ChunkInfo);
 	NewChunkActor->FinishSpawning(NewTrans);
-	// NewChunkActor->SetActorLocationAndRotation(NewChunk.ChunkWorldPosition, FRotator::ZeroRotator);
-	// GEngine->AddOnScreenDebugMessage(-1, 115.f, FColor::Green, FString::Printf(TEXT("Chunk Position: (%f, %f)"), Pos.X, Pos.Y));
 	// NewChunkActor->RenderMesh();
 	NewChunkActor->RenderMeshGreedy();
 	}
 }
 
-void ChunkBuilder::DeleteChunkMesh(UWorld* World, Chunk& ChunkInfo)
+void ChunkBuilder::DeleteChunkMesh(const AGameModeBase* GameMode, Chunk& ChunkInfo)
 {
 }

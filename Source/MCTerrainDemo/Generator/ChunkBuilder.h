@@ -34,11 +34,11 @@ public:
 	// 地物生成
 	static void SpawnFeatures(Chunk& ChunkInfo);
 	// 生成网格
-	static void GenerateChunkMesh(UWorld* World, Chunk& ChunkInfo);
+	static void GenerateChunkMesh(const AGameModeBase* GameMode, Chunk& ChunkInfo);
 	// 生成初始实体
 
 
 	// chunk卸载相关
-	static void DeleteChunkMesh(UWorld* World, Chunk& ChunkInfo);
+	static void DeleteChunkMesh(const AGameModeBase* GameMode, Chunk& ChunkInfo);
 	
 };

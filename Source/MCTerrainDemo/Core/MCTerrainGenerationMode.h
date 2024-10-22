@@ -32,6 +32,6 @@ public:
 	void TestGenerateWorld();
 	UFUNCTION(BlueprintCallable, Category="TestFunc")
 	TArray<FIntPoint> GetAllChunks();
-	UFUNCTION(BlueprintCallable, Category="TestFunc")
-	FIntPoint GetPlayerLocatedChunkIndex();
+	// UFUNCTION(BlueprintCallable, Category="TestFunc")
+	// FIntPoint GetPlayerLocatedChunkIndex();
 };

@@ -4,6 +4,7 @@
 #include "MCTerrainGenerationMode.h"
 
 #include "Kismet/GameplayStatics.h"
+#include "MCTerrainDemo/Core/LocationCastLibrary.h"
 #include "MCTerrainDemo/Generator/HeightGenerator.h"
 #include "MCTerrainDemo/Generator/ContinentalnessGenerator.h"
 #include "MCTerrainDemo/Tool/IndexTool.h"
@@ -11,23 +12,25 @@
 
 void AMCTerrainGenerationMode::UpdateChunks()
 {
-	const APlayerController* Controller = UGameplayStatics::GetPlayerController(this, 0);
-	if (Controller != nullptr)
-	{
-		const APawn* Pawn = Controller->GetPawn();
-		if (Pawn != nullptr)
-		{
-			PlayerWorldLocation = static_cast<FIntVector>(Pawn->GetActorLocation() / 100.f);
-		}
-	}
+	// const APlayerController* Controller = UGameplayStatics::GetPlayerController(this, 0);
+	// if (Controller != nullptr)
+	// {
+	// 	const APawn* Pawn = Controller->GetPawn();
+	// 	if (Pawn != nullptr)
+	// 	{
+	// 		PlayerWorldLocation = ULocationCastLibrary::EngineToWorldLocation(Pawn->GetActorLocation());
+	// 	}
+	// }
+	PlayerWorldLocation = ULocationCastLibrary::GetPlayerWorldLocation(this);
 	// 当前玩家所处的区块Index
 	// const FIntPoint ChunkIndex = {PlayerWorldLocation.X / MaxBlockWidth, PlayerWorldLocation.Y / MaxBlockWidth};
-	const FIntPoint ChunkIndex = GetPlayerLocatedChunkIndex();
+	const FIntPoint ChunkIndex = ULocationCastLibrary::GetPlayerLocatedChunkIndex(this);
 	for (int i = -DrawDistance; i <= DrawDistance; i++)
 	for (int j = -DrawDistance; j <= DrawDistance; j++)
 	{
 		// const FVector PosInput = FVector(MaxBlockWidth*(i)+(WorldCenterLocation.X), MaxBlockWidth*(j)+(WorldCenterLocation.Y), 0.0f);
-		const FVector PosInput = FVector(MaxBlockWidth*(i+ChunkIndex.X), MaxBlockWidth*(j+ChunkIndex.Y), 0.0f);
+		// const FVector PosInput = FVector(MaxBlockWidth*(i+ChunkIndex.X), MaxBlockWidth*(j+ChunkIndex.Y), 0.0f);
+		const FVector PosInput = ULocationCastLibrary::ChunkIndexToChunkInfoLocation(ChunkIndex.X + i, ChunkIndex.Y + j);
 		Chunk* NewChunk = LoadChunk(ChunkIndex.X + i,ChunkIndex.Y + j,PosInput);
 		if (NewChunk)
 		{
@@ -90,23 +93,23 @@ TArray<FIntPoint> AMCTerrainGenerationMode::GetAllChunks()
 	return Vec;
 }
 
-FIntPoint AMCTerrainGenerationMode::GetPlayerLocatedChunkIndex()
-{
-	const APlayerController* Controller = UGameplayStatics::GetPlayerController(this, 0);
-	if (Controller != nullptr)
-	{
-		const APawn* Pawn = Controller->GetPawn();
-		if (Pawn != nullptr)
-		{
-			PlayerWorldLocation = static_cast<FIntVector>(Pawn->GetActorLocation() / 100.f);
-		}
-	}
-	// 当前玩家所处的区块Index
-	int32 X = PlayerWorldLocation.X / MaxBlockWidth;
-	if (PlayerWorldLocation.X < 0) X -= 1;
-	int32 Y = PlayerWorldLocation.X / MaxBlockWidth;
-	if (PlayerWorldLocation.Y < 0) Y -= 1;
-	return FIntPoint{X, Y};
-}
+// FIntPoint AMCTerrainGenerationMode::GetPlayerLocatedChunkIndex()
+// {
+// 	const APlayerController* Controller = UGameplayStatics::GetPlayerController(this, 0);
+// 	if (Controller != nullptr)
+// 	{
+// 		const APawn* Pawn = Controller->GetPawn();
+// 		if (Pawn != nullptr)
+// 		{
+// 			PlayerWorldLocation = static_cast<FIntVector>(Pawn->GetActorLocation() / 100.f);
+// 		}
+// 	}
+// 	// 当前玩家所处的区块Index
+// 	int32 X = PlayerWorldLocation.X / MaxBlockWidth;
+// 	if (PlayerWorldLocation.X < 0) X -= 1;
+// 	int32 Y = PlayerWorldLocation.X / MaxBlockWidth;
+// 	if (PlayerWorldLocation.Y < 0) Y -= 1;
+// 	return FIntPoint{X, Y};
+// }
 
 

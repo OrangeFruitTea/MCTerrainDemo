@@ -13,7 +13,9 @@ UCLASS()
 class MCTERRAINDEMO_API AMCTerrainGenerationMode : public AGameModeBase
 {
 	GENERATED_BODY()
-protected:
+public:
+	// // 同步锁
+	// static inline FCriticalSection CriticalSection;
 	// 世界中心位置
 	FVector WorldCenterLocation = FVector(0, 0, 0);
 	FIntVector PlayerWorldLocation = FIntVector(0, 0, 0);
@@ -35,3 +37,23 @@ public:
 	// UFUNCTION(BlueprintCallable, Category="TestFunc")
 	// FIntPoint GetPlayerLocatedChunkIndex();
 };
+
+// class FGenerateChunkAsyncTask : public FNonAbandonableTask
+// {
+// 	friend class FAutoDeleteAsyncTask<FGenerateChunkAsyncTask>;
+// public:
+// 	// 创建ChunkInfo所需参数
+// 	FIntPoint ChunkIndex;
+// 	FVector PosInput;
+// 	AMCTerrainGenerationMode* TerrainGenerationMode;
+// 	
+// 	FGenerateChunkAsyncTask(const FIntPoint& ChunkIndex, const FVector& PosInput, AMCTerrainGenerationMode* TerrainGenerationMode);
+// 	~FGenerateChunkAsyncTask() = default;
+//
+// 	void DoWork();
+// 	
+// 	FORCEINLINE TStatId GetStatId() const 
+// 	{
+// 		RETURN_QUICK_DECLARE_CYCLE_STAT(FGenerateChunkAsyncTask, STATGROUP_ThreadPoolAsyncTasks);
+// 	}
+// };

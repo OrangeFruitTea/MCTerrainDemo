@@ -8,7 +8,6 @@ bool ContinentalnessGenerator::LoadCurve()
 	ContinentalCurve = LoadObject<UCurveFloat>(nullptr, (TEXT("Engine.CurveFloat'/Game/Core/Curve/Crv_Continental.Crv_Continental'")));
 	if (ContinentalCurve != nullptr)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Load Continental Curve Success")));
 		return true;
 	}
 	return false;
@@ -32,7 +31,6 @@ void ContinentalnessGenerator::GenerateContinental(Chunk& Chunk)
 			// GEngine->AddOnScreenDebugMessage(-1, 115.f, FColor::Green, FString::Printf(TEXT("Continental: (%f)"), Continental));
 		}
 	}
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Load Continental Curve Failed")));
 }
 
 float ContinentalnessGenerator::GetCrvValue(float Key)
@@ -41,6 +39,5 @@ float ContinentalnessGenerator::GetCrvValue(float Key)
 	{
 		return ContinentalCurve->GetFloatValue(Key);
 	}
-	GEngine->AddOnScreenDebugMessage(-1, 115.f, FColor::Red, FString::Printf(TEXT("Load Continental Curve Failed")));
 	return -1;
 }

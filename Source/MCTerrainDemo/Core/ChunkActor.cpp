@@ -24,6 +24,7 @@ AChunkActor::AChunkActor()
 void AChunkActor::InitChunkActor(Chunk* Info)
 {
 	ChunkInfo = Info;
+	Info->Mesh = this;
 	const FString IndexText = FString::Printf(TEXT("%d, %d"), Info->ChunkIndex.X, Info->ChunkIndex.Y);
 	TextComp->SetText(FText::FromString(IndexText));	
 }

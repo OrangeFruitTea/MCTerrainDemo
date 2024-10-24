@@ -3,10 +3,7 @@
 
 #include "MCTerrainGenerationMode.h"
 
-#include "Kismet/GameplayStatics.h"
 #include "MCTerrainDemo/Core/LocationCastLibrary.h"
-#include "MCTerrainDemo/Generator/HeightGenerator.h"
-#include "MCTerrainDemo/Generator/ContinentalnessGenerator.h"
 #include "MCTerrainDemo/Tool/IndexTool.h"
 #include "MCTerrainDemo/Generator/ChunkBuilder.h"
 
@@ -14,41 +11,50 @@ void AMCTerrainGenerationMode::UpdateChunks()
 {
 	PlayerWorldLocation = ULocationCastLibrary::GetPlayerWorldLocation(this);
 	// 当前玩家所处的区块Index
-	// const FIntPoint ChunkIndex = {PlayerWorldLocation.X / MaxBlockWidth, PlayerWorldLocation.Y / MaxBlockWidth};
-	const FIntPoint ChunkIndex = ULocationCastLibrary::GetPlayerLocatedChunkIndex(this);
+	const FIntPoint PlayerLocatedChunkIndex = ULocationCastLibrary::GetPlayerLocatedChunkIndex(this);
 	for (int i = -DrawDistance; i <= DrawDistance; i++)
 	for (int j = -DrawDistance; j <= DrawDistance; j++)
 	{
-		// const FVector PosInput = FVector(MaxBlockWidth*(i+ChunkIndex.X), MaxBlockWidth*(j+ChunkIndex.Y), 0.0f);
-		const FVector PosInput = ULocationCastLibrary::ChunkIndexToChunkInfoLocation(ChunkIndex.X + i, ChunkIndex.Y + j);
-		Chunk* NewChunk = LoadChunk(ChunkIndex.X + i,ChunkIndex.Y + j,PosInput);
-		if (NewChunk)
-		{
-			// SpawnChunkActor(*NewChunk);
-			ChunkBuilder::GenerateChunkMesh(this, *NewChunk);
-		}
+		const FIntPoint ChunkIndex(PlayerLocatedChunkIndex.X + i, PlayerLocatedChunkIndex.Y + j);
+		const FVector PosInput = ULocationCastLibrary::ChunkIndexToChunkInfoLocation(ChunkIndex.X, ChunkIndex.Y);
+		// (new FAutoDeleteAsyncTask<FGenerateChunkAsyncTask>(ChunkIndex, PosInput, this))->StartBackgroundTask();
+		// 根据ChunkIndex判断是否已经生成Chunk
+		if (Chunks.Contains(IndexTool::Index(ChunkIndex.X, ChunkIndex.Y))) continue;
+		
+		Chunk* NewChunk = LoadChunk(ChunkIndex.X,ChunkIndex.Y,PosInput);
+		NewChunk->SetChunkCalculateLevel(ECalculateLevel::Active);
+		Chunks2Display.Emplace(NewChunk);
+		ChunkBuilder::GenerateChunkMesh(this, *NewChunk);
 	}
+	// for (auto SpawnedChunk : Chunks2Display)
+	// {
+	// 	if (!(PlayerLocatedChunkIndex.X - 1 <= SpawnedChunk->ChunkIndex.X && SpawnedChunk->ChunkIndex.X <= PlayerLocatedChunkIndex.X + 1 &&
+	// 		PlayerLocatedChunkIndex.Y - 1 <= SpawnedChunk->ChunkIndex.Y && SpawnedChunk->ChunkIndex.Y <= PlayerLocatedChunkIndex.Y + 1))
+	// 	{
+	// 		SpawnedChunk->SetChunkCalculateLevel(ECalculateLevel::Deleted);
+	// 	} 
+	// }
+	// for (auto It =  Chunks2Display.CreateConstIterator(); It; ++It)
+	// {
+	// 	Chunk* PendingKillChunk = *It;
+	// 	if (PendingKillChunk->GetChunkCalculateLevel() == ECalculateLevel::Deleted)
+	// 	{
+	// 		ChunkBuilder::DeleteChunkMesh(this, *PendingKillChunk);
+	// 		Chunks2Display.Remove(PendingKillChunk);
+	// 		delete PendingKillChunk;
+	// 	}
+	// }
 }
 
 Chunk* AMCTerrainGenerationMode::LoadChunk(int x, int y, const FVector& PosInput)
 {
-	// 根据ChunkIndex判断是否已经生成Chunk
 	uint64 Index = IndexTool::Index(x, y);
-	if (!Chunks.Contains(Index))
-	{
-		// chunk信息载入至Info中
-		Chunks.Emplace(Index, Chunk(x, y, PosInput));
-		// GEngine->AddOnScreenDebugMessage(-1, 115.f, FColor::Green, FString::Printf(TEXT("Chunk Number: (%f, %f)"), PosInput.X, PosInput.Y));
-		Chunk& NewChunk = Chunks[Index];
-
-		// 数据生成
-		ContinentalnessGenerator::GenerateContinental(NewChunk);
-		// HeightGenerator::GenerateDensity(NewChunk);
-		HeightGenerator::GenerateHeight(NewChunk);
-
-		return &NewChunk;
-	}
-	return nullptr;
+	// chunk信息载入至Info中
+	Chunks.Emplace(Index, Chunk(x, y, PosInput));
+	Chunk& NewChunk = Chunks[Index];
+	// 数据生成
+	ChunkBuilder::FillBasicTerrain(NewChunk);
+	return &NewChunk;
 }
 
 void AMCTerrainGenerationMode::TestGenerateWorld()
@@ -65,3 +71,24 @@ TArray<FIntPoint> AMCTerrainGenerationMode::GetAllChunks()
 	}
 	return Vec;
 }
+//
+// FGenerateChunkAsyncTask::FGenerateChunkAsyncTask(const FIntPoint& ChunkIndex, const FVector& PosInput,
+// 	AMCTerrainGenerationMode* TerrainGenerationMode)
+// 	: ChunkIndex(ChunkIndex),
+// 	  PosInput(PosInput),
+// 	  TerrainGenerationMode(TerrainGenerationMode)
+// {
+// }
+//
+// void FGenerateChunkAsyncTask::DoWork()
+// {
+// 	uint64 Index = IndexTool::Index(ChunkIndex.X, ChunkIndex.Y);
+// 	// 同步锁
+// 	FScopeLock ScopeLock(&TerrainGenerationMode->CriticalSection);
+// 	if (!TerrainGenerationMode->Chunks.Contains(Index))
+// 	{
+// 		TerrainGenerationMode->Chunks.Emplace(Index, Chunk(ChunkIndex.X, ChunkIndex.Y, PosInput));
+// 		Chunk& NewChunk = TerrainGenerationMode->Chunks[Index];
+// 		ChunkBuilder::FillBasicTerrain(NewChunk);
+// 	}
+// }

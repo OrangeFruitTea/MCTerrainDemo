@@ -6,12 +6,19 @@
 #include "EnumClass.generated.h"
 
 UENUM()
-enum EDirection { Fwd, Right, Bwd, Left, Up, Down };
+enum class EDirection { Fwd, Right, Bwd, Left, Up, Down };
+
+UENUM()
+enum class ECalculateLevel
+{
+	Deleted = 0,
+	Active
+};
 
 UENUM()
 enum EBlockType
 {
-	Null,
+	Null = 0,
 	Default,
 	Air,
 	Dirt,

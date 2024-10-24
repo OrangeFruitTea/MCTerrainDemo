@@ -18,7 +18,7 @@ EBlockType Chunk::GetBlock(const int X, const int Y, const int Z)
 	const uint64 DataIndex = Index(X,Y,Z);
 	if (Blocks.Contains(DataIndex))
 		return Blocks[DataIndex];
-	return Air;
+	return EBlockType::Air;
 }
 
 void Chunk::AddBlock2Data(EBlockType BlockType, const int X, const int Y, const int Z)
@@ -97,7 +97,7 @@ FIntVector Chunk::UnIndex(const uint64 Index) const
 		int32(Index&0xFFFFF)-Offset);
 }
 
-Chunk::Chunk(int32 X, int32 Y, FVector Position)
+Chunk::Chunk(int32 X, int32 Y, const FVector& Position)
 	: Blocks{},
 	ChunkIndex{X, Y},
 	Density{},
@@ -106,7 +106,13 @@ Chunk::Chunk(int32 X, int32 Y, FVector Position)
 	ChunkWorldPosition = Position;
 }
 
-Chunk::~Chunk()
+void Chunk::SetChunkCalculateLevel(ECalculateLevel Value)
 {
+	this->CalculateLevel = Value;
+}
+
+ECalculateLevel Chunk::GetChunkCalculateLevel() const 
+{
+	return this->CalculateLevel;
 }
 

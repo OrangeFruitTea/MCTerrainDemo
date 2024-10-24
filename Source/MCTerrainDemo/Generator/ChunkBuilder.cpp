@@ -31,6 +31,8 @@ void ChunkBuilder::SpawnBiomes(Chunk& ChunkInfo)
 
 void ChunkBuilder::FillBasicTerrain(Chunk& ChunkInfo)
 {
+	ContinentalnessGenerator::GenerateContinental(ChunkInfo);
+	HeightGenerator::GenerateHeight(ChunkInfo);
 }
 
 void ChunkBuilder::BrushSurface(Chunk& ChunkInfo)
@@ -62,4 +64,10 @@ void ChunkBuilder::GenerateChunkMesh(const AGameModeBase* GameMode, Chunk& Chunk
 
 void ChunkBuilder::DeleteChunkMesh(const AGameModeBase* GameMode, Chunk& ChunkInfo)
 {
+	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Green, FString::Printf(TEXT("Deleting...")));
+	if (ChunkInfo.Mesh.IsValid())
+	{
+		ChunkInfo.Mesh->ConditionalBeginDestroy();
+		ChunkInfo.Mesh == nullptr;
+	}
 }

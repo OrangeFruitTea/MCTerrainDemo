@@ -26,11 +26,20 @@ private:
 	FIntVector UnIndex(const uint64 Index) const;
 
 public:
-	explicit Chunk(int32 X, int32 Y, FVector Position);
-	~Chunk();
+	explicit Chunk(int32 X, int32 Y, const FVector& Position);
+	~Chunk()=default;
 
 	// chunk索引
 	const FIntPoint ChunkIndex = {0, 0};
+private:
+	// chunk计算等级
+	ECalculateLevel CalculateLevel = ECalculateLevel::Active;
+public:
+	void SetChunkCalculateLevel(ECalculateLevel Value);
+	ECalculateLevel GetChunkCalculateLevel() const;
+public:
+	// chunk对应的chunkActor
+	TWeakObjectPtr<AChunkActor> Mesh;
 	// chunk的世界位置
 	FVector ChunkWorldPosition;
 	// chunk 网格数据
@@ -45,6 +54,8 @@ public:
 
 	// 向chunk数据中加入block, XYZ: 对应的数组下标
 	void AddBlock2Data(EBlockType BlockType, const int X, const int Y, const int Z);
+
+	
 	// chunk地形密度[-1.f, 1.f]
 private:
 	TMap<uint64, float> Density;

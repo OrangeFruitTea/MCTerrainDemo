@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "Chunk.h"
+#include "MCTerrainGenerationMode.h"
 #include "Kismet/GameplayStatics.h"
 #include "LocationCastLibrary.generated.h"
 
@@ -31,5 +32,6 @@ public:
 	static FIntVector GetPlayerWorldLocation(const AGameModeBase* GameMode, const int Index = 0);
 	UFUNCTION(BlueprintCallable, Category="LocationCast")
 	static FIntPoint GetPlayerLocatedChunkIndex(const AGameModeBase* GameMode, const int Index = 0);
+	static FVector WorldToNoiseParam(int X, int Y, int Z);
 	
 };

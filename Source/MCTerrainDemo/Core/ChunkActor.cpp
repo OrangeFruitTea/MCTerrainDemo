@@ -3,6 +3,7 @@
 
 #include "ChunkActor.h"
 
+
 AChunkActor::AChunkActor()
 {
 	PrimaryActorTick.bCanEverTick = false;
@@ -226,12 +227,12 @@ void AChunkActor::CreateQuad(FMask Mask, FIntVector AxisMask, int Width, int Hei
 	{
 		ChunkInfo->Sections.Emplace(Index, FChunkMeshData());
 	}
-
+	auto PreHandleV = [](FIntVector Vec) { return FVector(Vec)*100; };
 	ChunkInfo->Sections[Index].Vertices.Append({
-		FVector(V1)*100 + ChunkInfo->ChunkWorldPosition*99,
-		FVector(V2)*100 + ChunkInfo->ChunkWorldPosition*99,
-		FVector(V3)*100 + ChunkInfo->ChunkWorldPosition*99,
-		FVector(V4)*100 + ChunkInfo->ChunkWorldPosition*99
+		PreHandleV(V1) + ChunkInfo->ChunkWorldPosition*99,
+		PreHandleV(V2) + ChunkInfo->ChunkWorldPosition*99,
+		PreHandleV(V3) + ChunkInfo->ChunkWorldPosition*99,
+		PreHandleV(V4) + ChunkInfo->ChunkWorldPosition*99
 	});
 	ChunkInfo->Sections[Index].Triangles.Append({
 		ChunkInfo->Sections[Index].VertexCount,
@@ -272,7 +273,21 @@ void AChunkActor::CreateQuad(FMask Mask, FIntVector AxisMask, int Width, int Hei
 			FVector2D(PreHandle(0), PreHandle(0)),
 		});
 	}
-
+	// 获取草地面对应的温度湿度以染色
+	if (TextureIndex == GetTextureIndex(EBlockType::GrassBlock, FVector::UpVector))
+	{
+		ChunkInfo->Sections[Index].UV1.Append({
+			FVector2D(TemperatureGenerator::GetTemperatureByIndex(V1.X, V1.Y, V1.Z),
+						HumidityGenerator::GetHumidityByIndex(V1.X, V1.Y, V1.Z)),
+			FVector2D(TemperatureGenerator::GetTemperatureByIndex(V2.X,V2.Y, V2.Z),
+						HumidityGenerator::GetHumidityByIndex(V2.X, V2.Y, V2.Z)),
+			FVector2D(TemperatureGenerator::GetTemperatureByIndex(V3.X, V3.Y, V3.Z),
+						HumidityGenerator::GetHumidityByIndex(V3.X, V3.Y, V3.Z)),
+			FVector2D(TemperatureGenerator::GetTemperatureByIndex(V4.X, V4.Y, V4.Z),
+						HumidityGenerator::GetHumidityByIndex(V4.X, V4.Y, V4.Z)),
+		});
+		GEngine->AddOnScreenDebugMessage(-1, 100.f, FColor::Orange, FString::Printf(TEXT("UV1: (%f, %lf)"), ChunkInfo->Sections[Index].UV1[0].X, ChunkInfo->Sections[Index].UV1[0].Y));
+	}
 	ChunkInfo->Sections[Index].VertexCount += 4;
 }
 
@@ -294,6 +309,7 @@ void AChunkActor::ApplyMesh()
 	// 	TArray<FProcMeshTangent>(),
 	// 	false);
 	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Green, FString::Printf(TEXT("Section Count: %d"), ChunkInfo->Sections.Num()));
+	TArray<FVector2D> EmptyArray;
 	for (auto& Section : ChunkInfo->Sections)
 	{
 		FChunkMeshData& MeshData = Section.Value;
@@ -304,6 +320,9 @@ void AChunkActor::ApplyMesh()
 		MeshData.Triangles,
 		MeshData.Normals,
 		MeshData.UV0,
+		MeshData.UV1,
+		EmptyArray,
+		EmptyArray,
 		MeshData.Colors,
 		TArray<FProcMeshTangent>(),
 		true);

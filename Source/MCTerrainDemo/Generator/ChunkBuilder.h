@@ -37,7 +37,8 @@ public:
 	static void GenerateChunkMesh(const AGameModeBase* GameMode, Chunk& ChunkInfo);
 	// 生成初始实体
 
-
+	// 清除中间数据
+	static void ClearIntermediateData();
 	// chunk卸载相关
 	static void DeleteChunkMesh(const AGameModeBase* GameMode, Chunk& ChunkInfo);
 	

@@ -63,8 +63,10 @@ private:
 public:
 	void SetDensity(const int X, const int Y, const int Z, float Value);
 	float GetDensity(const int X, const int Y, const int Z);
-	// chunk大陆性
+
+	// 计算生物群系与初始地形高度的中间数据
 private:
+	// chunk大陆性
 	TMap<uint64, float> Continental;
 
 public:

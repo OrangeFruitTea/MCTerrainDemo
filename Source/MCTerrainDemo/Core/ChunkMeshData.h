@@ -16,7 +16,8 @@ public:
 	TArray<FVector> Normals;
 	TArray<FColor> Colors;
 	TArray<FVector2d> UV0;
-
+	// UV1存放对应草地面的温度(x)与湿度(y)
+	TArray<FVector2d> UV1;
 	void Clear();
 };
 
@@ -28,5 +29,6 @@ inline void FChunkMeshData::Clear()
 	Normals.Empty();
 	Colors.Empty();
 	UV0.Empty();
+	UV1.Empty();
 }
 

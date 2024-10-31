@@ -8,6 +8,8 @@
 #include "Components/TextRenderComponent.h"
 #include "Materials/MaterialInstanceConstant.h"
 #include "MCTerrainDemo/Core/Chunk.h"
+#include "MCTerrainDemo/Generator/TemperatureGenerator.h"
+#include "MCTerrainDemo/Generator/HumidityGenerator.h"
 #include "ChunkActor.generated.h"
 
 inline UMaterialInstanceConstant* M_BlockBase = LoadObject<UMaterialInstanceConstant>(nullptr, TEXT("Engine.MaterialInstanceConstant'/Game/Materials/Blocks/MI_BlockBase.MI_BlockBase'"));

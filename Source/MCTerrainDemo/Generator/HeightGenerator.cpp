@@ -58,7 +58,7 @@ void HeightGenerator::GenerateHeight(Chunk& Chunk)
  		// GEngine->AddOnScreenDebugMessage(-1, 115.f, FColor::Red, FString::Printf(TEXT("Noise Value: (%f)"), NoiseValue));
 		// if (NoiseValue >= -0.6f)
 		{
-			const float CrvCtnl = ContinentalnessGenerator::GetCrvValue(Chunk.GetContinental(x,y));
+			const float CrvCtnl = ContinentalnessGenerator::GetCrvValue(ContinentalnessGenerator::GetContinentalByIndex(x,y));
 			const int FinalHeight = floor((NoiseValue*16+16) * CrvCtnl);
 			// Chunk.AddBlock2Data(EBlockType::Stone, x,y,NoiseValue*10);
 			for (int i = 0; i <= FinalHeight; i++)
@@ -74,7 +74,6 @@ void HeightGenerator::GenerateHeight(Chunk& Chunk)
 				}
 			}
 		}
-		
 	}
 }
 

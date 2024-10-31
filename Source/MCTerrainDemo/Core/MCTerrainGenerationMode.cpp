@@ -24,7 +24,6 @@ void AMCTerrainGenerationMode::UpdateChunks()
 		Chunk* NewChunk = LoadChunk(ChunkIndex.X,ChunkIndex.Y,PosInput);
 		NewChunk->SetChunkCalculateLevel(ECalculateLevel::Active);
 		Chunks2Display.Emplace(NewChunk);
-		ChunkBuilder::GenerateChunkMesh(this, *NewChunk);
 	}
 	// for (auto SpawnedChunk : Chunks2Display)
 	// {
@@ -54,6 +53,8 @@ Chunk* AMCTerrainGenerationMode::LoadChunk(int x, int y, const FVector& PosInput
 	Chunk& NewChunk = Chunks[Index];
 	// 数据生成
 	ChunkBuilder::FillBasicTerrain(NewChunk);
+	ChunkBuilder::GenerateChunkMesh(this, NewChunk);
+	ChunkBuilder::ClearIntermediateData();
 	return &NewChunk;
 }
 

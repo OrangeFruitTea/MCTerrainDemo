@@ -56,4 +56,10 @@ FIntPoint ULocationCastLibrary::GetPlayerLocatedChunkIndex(const AGameModeBase* 
 	return WorldToChunkIndex(GetPlayerWorldLocation(GameMode, Index));
 }
 
+FVector ULocationCastLibrary::WorldToNoiseParam(int X, int Y, int Z=0)
+{
+	const FVector PosInput = ChunkIndexToChunkInfoLocation(X * MaxBlockWidth, Y * MaxBlockWidth);
+	return FVector(X+PosInput.X, Y+PosInput.Y, Z+PosInput.Z);
+}
+
 

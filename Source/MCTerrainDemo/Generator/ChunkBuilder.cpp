@@ -32,6 +32,8 @@ void ChunkBuilder::SpawnBiomes(Chunk& ChunkInfo)
 void ChunkBuilder::FillBasicTerrain(Chunk& ChunkInfo)
 {
 	ContinentalnessGenerator::GenerateContinental(ChunkInfo);
+	TemperatureGenerator::GenerateTemperature(ChunkInfo);
+	HumidityGenerator::GenerateHumidity(ChunkInfo);
 	HeightGenerator::GenerateHeight(ChunkInfo);
 }
 
@@ -60,6 +62,11 @@ void ChunkBuilder::GenerateChunkMesh(const AGameModeBase* GameMode, Chunk& Chunk
 	// NewChunkActor->RenderMesh();
 	NewChunkActor->RenderMeshGreedy();
 	}
+}
+
+void ChunkBuilder::ClearIntermediateData()
+{
+	ContinentalnessGenerator::ClearMap();
 }
 
 void ChunkBuilder::DeleteChunkMesh(const AGameModeBase* GameMode, Chunk& ChunkInfo)

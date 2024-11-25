@@ -23,9 +23,10 @@ private:
 public:
 	static void SetSeed(const int32 Seed);
 	static float GetWorldBlockContinental(int WorldX, int WorldY, int WorldZ);
+	static float GetWorldBlockContinental(FIntVector WorldLocation);
 	static float GetRelativeBlockContinental(const Chunk& Chunk, int X, int Y, int Z);
 	static void GenerateContinental(const Chunk& Chunk);
-	static float GetContinentalByIndex(int X, int Y, int Z=16);
+	static float GetContinentalByIndex(int X, int Y, int Z=DefaultTestValue);
 	static void ClearMap();
 	static float GetCrvValue(float Key);
 	ContinentalnessGenerator()=delete;

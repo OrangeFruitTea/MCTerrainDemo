@@ -20,9 +20,10 @@ private:
 public:
 	static void SetSeed(const int32 Seed);
 	static float GetWorldBlockTemperature(int WorldX, int WorldY, int WorldZ);
+	static float GetWorldBlockTemperature(FIntVector WorldLocation);
 	static float GetRelativeBlockTemperature(const Chunk& Chunk, int X, int Y, int Z);
 	static void GenerateTemperature(const Chunk& Chunk);
-	static float GetTemperatureByIndex(int X, int Y, int Z=16);
+	static float GetTemperatureByIndex(int X, int Y, int Z=DefaultTestValue);
 	static void ClearMap();
 	TemperatureGenerator()=delete;
 	~TemperatureGenerator()=delete;

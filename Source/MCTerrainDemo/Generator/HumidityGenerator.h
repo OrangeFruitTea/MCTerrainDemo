@@ -20,9 +20,10 @@ private:
 public:
 	static void SetSeed(const int32 Seed);
 	static float GetWorldBlockHumidity(int WorldX, int WorldY, int WorldZ);
+	static float GetWorldBlockHumidity(FIntVector WorldLocation);
 	static float GetRelativeBlockHumidity(const Chunk& Chunk, int X, int Y, int Z);
 	static void GenerateHumidity(const Chunk& Chunk);
-	static float GetHumidityByIndex(int X, int Y, int Z);
+	static float GetHumidityByIndex(int X, int Y, int Z=DefaultTestValue);
 	static void ClearMap();
 	HumidityGenerator()=delete;
 	~HumidityGenerator()=delete;

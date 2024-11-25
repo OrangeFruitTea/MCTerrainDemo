@@ -15,6 +15,11 @@ float HumidityGenerator::GetWorldBlockHumidity(int WorldX, int WorldY, int World
 	return NoiseLite->GetNoise(Input.X, Input.Y, Input.Z);
 }
 
+float HumidityGenerator::GetWorldBlockHumidity(FIntVector WorldLocation)
+{
+	return GetWorldBlockHumidity(WorldLocation.X, WorldLocation.Y, WorldLocation.Z);
+}
+
 float HumidityGenerator::GetRelativeBlockHumidity(const Chunk& Chunk, int X, int Y, int Z)
 {
 	return NoiseLite->GetNoise(X+Chunk.ChunkWorldPosition.X, Y+Chunk.ChunkWorldPosition.Y, double(Z));

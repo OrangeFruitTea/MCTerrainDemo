@@ -25,6 +25,11 @@ float ContinentalnessGenerator::GetWorldBlockContinental(int WorldX, int WorldY,
 	return NoiseLite->GetNoise(Input.X, Input.Y, Input.Z);
 }
 
+float ContinentalnessGenerator::GetWorldBlockContinental(FIntVector WorldLocation)
+{
+	return GetWorldBlockContinental(WorldLocation.X, WorldLocation.Y, WorldLocation.Z);
+}
+
 float ContinentalnessGenerator::GetRelativeBlockContinental(const Chunk& Chunk, int X, int Y, int Z)
 {
 	return NoiseLite->GetNoise(X+Chunk.ChunkWorldPosition.X, Y+Chunk.ChunkWorldPosition.Y, double(Z));

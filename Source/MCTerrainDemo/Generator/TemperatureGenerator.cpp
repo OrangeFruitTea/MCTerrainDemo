@@ -16,6 +16,11 @@ float TemperatureGenerator::GetWorldBlockTemperature(int WorldX, int WorldY, int
 	return NoiseLite->GetNoise(Input.X, Input.Y, Input.Z);
 }
 
+float TemperatureGenerator::GetWorldBlockTemperature(FIntVector WorldLocation)
+{
+	return GetWorldBlockTemperature(WorldLocation.X, WorldLocation.Y, WorldLocation.Z);
+}
+
 float TemperatureGenerator::GetRelativeBlockTemperature(const Chunk& Chunk, int X, int Y, int Z)
 {
 	return NoiseLite->GetNoise(X+Chunk.ChunkWorldPosition.X, Y+Chunk.ChunkWorldPosition.Y, double(Z));

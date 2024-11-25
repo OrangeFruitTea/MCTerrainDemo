@@ -4,6 +4,8 @@
 #include "HeightGenerator.h"
 
 #include "ContinentalnessGenerator.h"
+#include "HumidityGenerator.h"
+#include "TemperatureGenerator.h"
 
 void HeightGenerator::GenerateDensity(Chunk& Chunk)
 {
@@ -59,13 +61,16 @@ void HeightGenerator::GenerateHeight(Chunk& Chunk)
 		// if (NoiseValue >= -0.6f)
 		{
 			const float CrvCtnl = ContinentalnessGenerator::GetCrvValue(ContinentalnessGenerator::GetContinentalByIndex(x,y));
+			// const float H = HumidityGenerator::GetHumidityByIndex(x,y);
+			// const float T = TemperatureGenerator::GetTemperatureByIndex(x,y);
 			const int FinalHeight = floor((NoiseValue*16+16) * CrvCtnl);
+			// const int FinalHeight = (NoiseValue * 16 + 16) * (H + T);
 			// Chunk.AddBlock2Data(EBlockType::Stone, x,y,NoiseValue*10);
 			for (int i = 0; i <= FinalHeight; i++)
 			{
 				if (i < FinalHeight-2)
 					Chunk.AddBlock2Data(EBlockType::Stone, x,y,i);
-				else if (i < FinalHeight-1)
+				else if (i < FinalHeight)
 				{
 					Chunk.AddBlock2Data(EBlockType::Dirt, x,y,i);
 				} else
